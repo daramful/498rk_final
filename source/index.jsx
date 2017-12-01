@@ -12,7 +12,13 @@ import Home from './components/Home/Home.jsx';
 require('./styles/main.scss');
 
 render(
-    <Home />,
+    
+    <Router> 
+        <div>
+            <Route exact path="/" component={Home}/>
+        </div>
+    </Router>,
+
     // Define your router and replace <Home /> with it!
     document.getElementById('app')
 );
