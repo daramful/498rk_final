@@ -1,4 +1,4 @@
-# MP #2: New Clear REACTive App
+# FINAL PROJECT MIC DROP by TEAM NAME
 ### Due: October 9th, 2017, 11.59PM CDT
 
 ## Table of Contents
