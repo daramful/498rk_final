@@ -94,9 +94,9 @@ class Home extends Component {
 			.then((data) =>{
 				const getArtist = data.artists.items[0];
 				console.log(getArtist.name);
-				// this.setState({ 
-				// 	artist : getArtist
-				// });
+				this.setState({ 
+					artist : getArtist
+				});
 			})
 	}
 
@@ -139,7 +139,7 @@ class Home extends Component {
                 <div className="ui main text container">
                 	<input type="text" placeholder="search for an artist" ref="query" onChange={(e) => {this.search(e)}}/>
                 	<div className="search result"> 
-                		{this.state.artist.name}
+                		Searched Artist: {this.state.artist.name}
                 	</div>
                 	<h1 className="ui header">
                 		Welcome to MIC DROP
