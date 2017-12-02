@@ -14,7 +14,8 @@ class Home extends Component {
 			showModal: false,
 			loggedin: false,
 			query: "",
-			artist: []
+			track: "",
+			artists: []
 		};
 	}
 
@@ -78,8 +79,8 @@ class Home extends Component {
 	search(event){
 		// console.log('this.state',this.state);
 		const BASE_URL = 'https://api.spotify.com/v1/search?';
-		const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=artist&limit=1';
-		var accessToken = 'BQBjwn_DtZ5vg-4YurH2lc8Y-xrgErYWry37Ou911aFr8utlDNxz1f1ltCavb9u_Gifw6kTIzVTFKNBIggjlrq-HHxVx5R9FWG-iHP0Tacnj1eOkAXGJCwuW2oLHdBi9c5K2vOxw5JiIQTsPeO4ELYwrsJ4sHZKUPG6PzzMzpjf5WuJ5qA&refresh_token=AQCQGPdmZtN4rIUyKZdh1IHrITk1ReWr_qOsRSnAFAFqOOQFZKnNSdoqFUoBJOh-GwFiAHlYsIrWdIUHL-9dn2YSk7mmXclJGV_0gz-zR6xSf5gfyLnXVGU-uWFro09mzXM';
+		const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=track&limit=3';
+		var accessToken = 'BQBr5WkRWWtkw8cA8xcel7mtawDVzmv91_025S8BlzK7yZUYZ2G1AyghfSP9DqtbNVb9mPHl5l_8K7GV3RujR0ulMP9BWFJs991o-fz15u2Ev0yL61aexwTzQdsRfj3UXFqrXfhuYLSlNIhUxTYNRfN__56Jjg4h3orkC0T1RNVLVrLHJQ&refresh_token=AQAD6ukQeSNpSCqEdTXUrFT_-0x6HjdFs2VslwdKGctd7mRwk8Yc39PLLBGPvEmaEEacJp8bykx3XSsUnD0VddJ-aRQDBYruC0cnnKd0-sp7Qkmv4vvEDmdU7VGtirbzt0I';
 		var myOptions = {
 			method: 'GET',
 			headers: {
@@ -92,11 +93,12 @@ class Home extends Component {
 		fetch(FETCH_URL, myOptions)
 			.then((response) => response.json())
 			.then((data) =>{
-				const getArtist = data.artists.items[0];
-				console.log(getArtist.name);
 				this.setState({ 
-					artist : getArtist
+					track : data.tracks.items[0].name,
+					artists : data.tracks.items[0].artists
 				});
+			}).catch(function(error){
+				console.log(error);
 			})
 	}
 
@@ -139,7 +141,8 @@ class Home extends Component {
                 <div className="ui main text container">
                 	<input type="text" placeholder="search for an artist" ref="query" onChange={(e) => {this.search(e)}}/>
                 	<div className="search result"> 
-                		Searched Artist: {this.state.artist.name}
+                		<p>Searched Song: {this.state.track}</p>
+                		<p>by: {this.state.artists.map((i)=>{return (<div>{i.name}</div>)})}</p>
                 	</div>
                 	<h1 className="ui header">
                 		Welcome to MIC DROP
