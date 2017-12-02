@@ -12,7 +12,9 @@ class Home extends Component {
 		console.log("constructor");
 		this.state={
 			showModal: false,
-			loggedin: false
+			loggedin: false,
+			query: "",
+			artist: []
 		};
 	}
 
@@ -73,6 +75,31 @@ class Home extends Component {
 		});
 	}
 
+	search(event){
+		// console.log('this.state',this.state);
+		const BASE_URL = 'https://api.spotify.com/v1/search?';
+		const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=artist&limit=1';
+		var accessToken = 'BQBjwn_DtZ5vg-4YurH2lc8Y-xrgErYWry37Ou911aFr8utlDNxz1f1ltCavb9u_Gifw6kTIzVTFKNBIggjlrq-HHxVx5R9FWG-iHP0Tacnj1eOkAXGJCwuW2oLHdBi9c5K2vOxw5JiIQTsPeO4ELYwrsJ4sHZKUPG6PzzMzpjf5WuJ5qA&refresh_token=AQCQGPdmZtN4rIUyKZdh1IHrITk1ReWr_qOsRSnAFAFqOOQFZKnNSdoqFUoBJOh-GwFiAHlYsIrWdIUHL-9dn2YSk7mmXclJGV_0gz-zR6xSf5gfyLnXVGU-uWFro09mzXM';
+		var myOptions = {
+			method: 'GET',
+			headers: {
+				'Authorization': 'Bearer ' + accessToken
+			},
+			mode: 'cors',
+			cache: 'default'
+		};
+
+		fetch(FETCH_URL, myOptions)
+			.then((response) => response.json())
+			.then((data) =>{
+				const getArtist = data.artists.items[0];
+				console.log(getArtist.name);
+				// this.setState({ 
+				// 	artist : getArtist
+				// });
+			})
+	}
+
     render() {
     	if (this.state.loggedin==false){
         return(
@@ -110,6 +137,10 @@ class Home extends Component {
                     }
                 </div>
                 <div className="ui main text container">
+                	<input type="text" placeholder="search for an artist" ref="query" onChange={(e) => {this.search(e)}}/>
+                	<div className="search result"> 
+                		{this.state.artist.name}
+                	</div>
                 	<h1 className="ui header">
                 		Welcome to MIC DROP
             		</h1> 
