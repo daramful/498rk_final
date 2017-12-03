@@ -5,6 +5,8 @@ import 'semantic-ui-css/semantic.min.css';
 
 // Include your new Components here
 import Home from './components/Home/Home.jsx';
+import RecTest from './components/Home/RecTest.jsx';
+import Example from './components/Home/Example.jsx';
 
 // Include any new stylesheets here
 // Note that components' stylesheets should NOT be included here.
@@ -16,6 +18,8 @@ render(
     <Router> 
         <div>
             <Route exact path="/" component={Home}/>
+            <Route exact path="/RecTest" component={RecTest}/>
+            <Route exact path="/Example" component={Example}/>
         </div>
     </Router>,
 
