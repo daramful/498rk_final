@@ -1,15 +1,14 @@
 {
-  "name": "uiucwp_fa17",
+  "name": "final_project",
   "version": "1.0.0",
   "description": "",
-  "main": "index.jsx",
+  "main": "index.js",
   "scripts": {
-    "watch": "webpack -d --watch",
-    "build": "webpack",
-    "dev": "webpack-dev-server --content-base public/ --history-api-fallback"
+    "start": "nodemon --use_strict index.js",
+    "dev": "webpack"
   },
-  "author": "Simon Lu",
-  "license": "ISC",
+  "author": "No Name",
+  "license": "No Name",
   "devDependencies": {
     "autoprefixer": "^6.7.7",
     "babel-core": "^6.24.0",
@@ -23,16 +22,31 @@
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
     "webpack": "^2.3.2",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.4.2",
+    "nodemon": "^1.12.1"
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.1.0",
+    "method-override": "^2.3.10",
+    "mongoose": "^4.13.6",
     "normalize.css": "^6.0.0",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-router": "^4.0.0",
-    "react-router-dom": "^4.0.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "passport-spotify": "^0.3.1",
+    "react": "^16.1.0",
+    "react-dom": "^16.1.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-tap-event-plugin": "^3.0.2",
     "semantic-ui-css": "^2.2.12",
-    "semantic-ui-react": "^0.74.2"
+    "semantic-ui-react": "^0.76.0",
+    "validator": "^9.1.2"
   }
 }

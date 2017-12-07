@@ -1,37 +1,31 @@
 'use strict';
 
-const webpack = require('webpack');
+// const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
-const copy = require('copy-webpack-plugin');
+// const copy = require('copy-webpack-plugin');
 
-const BUILD_DIR = path.resolve(__dirname, 'public');
-const APP_DIR = path.resolve(__dirname, 'source');
+// const BUILD_DIR = path.resolve(__dirname, 'frontend/dist/js');
+// const APP_DIR = path.resolve(__dirname, 'backend/static');
 
 const config = {
 
-    entry: {
-        app: [APP_DIR + '/index.jsx'],
-        vendor: ['react', 'react-dom', 'react-router', 'react-router-dom']
-    },
+    entry: path.join(__dirname, '/frontend/src/app.jsx'),
 
     output: {
-        path: BUILD_DIR,
-        filename: 'bundle.js'
+        path: path.join(__dirname, '/frontend/dist/js'),
+        filename: 'app.js',
     },
-
-    context: path.join(__dirname, 'source'),
 
 	module: {
         loaders : [
 
             {
-                test: /\.jsx?/,
-                exclude : [/node_modules/, /bower_components/],
-                include : APP_DIR,
+                test: /\.jsx?$/,
+                include: path.join(__dirname, '/frontend/src'),
                 loader : 'babel-loader',
                 query: {
-                    presets: ['es2015']
+                    presets: ["react",'es2015']
                 }
             },
 
@@ -48,21 +42,22 @@ const config = {
         ]
     },
 
-    plugins: [
-        new copy([
-            {from: APP_DIR + '/html/', to: BUILD_DIR},
-            {from: APP_DIR + '/assets/', to: BUILD_DIR + '/assets/'}
-        ], {
-            copyUnmodified: false,
-            debug: 'debug'
-        }),
+    // plugins: [
+    //     new copy([
+    //         {from: './backend/static', to: './frontend/dist/js'},
+    //         {from: './frontend/src/assets/', to: './frontend/dist/js/assets/'}
+    //     ], {
+    //         copyUnmodified: false,
+    //         debug: 'debug'
+    //     }),
 
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: Infinity,
-            filename: 'vendor.bundle.js'
-        })
-    ]
+    //     new webpack.optimize.CommonsChunkPlugin({
+    //         name: 'vendor',
+    //         minChunks: Infinity,
+    //         filename: 'vendor.bundle.js'
+    //     })
+    // ]
+    watch: true
 };
 
 module.exports = config;
