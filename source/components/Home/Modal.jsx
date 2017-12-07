@@ -30,7 +30,10 @@ class Modal extends Component {
 			      			<p>Gender: </p>
 			    		</div>
 		    		</div>
-		    		<button className="ui red button" role="button" value="submit" onClick={this.props.handler}>Submit</button> 
+		    		<Link to={{ pathname: '/details/' + this.props.poke.id }}> <img src = {this.props.poke.sprites.front_default} />
+						<button className="ui red button" role="button" value="submit" onClick={this.props.handler}>Submit</button> 
+		    		</Link> 
+		    		
 	    		</div>
 			</div>
      )

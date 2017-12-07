@@ -7,6 +7,8 @@ import 'semantic-ui-css/semantic.min.css';
 import Home from './components/Home/Home.jsx';
 import RecTest from './components/Home/RecTest.jsx';
 import Example from './components/Home/Example.jsx';
+import Channel from './components/Home/Channel.jsx';
+import Music from './components/Home/Music.jsx';
 
 // Include any new stylesheets here
 // Note that components' stylesheets should NOT be included here.
@@ -20,6 +22,8 @@ render(
             <Route exact path="/" component={Home}/>
             <Route exact path="/RecTest" component={RecTest}/>
             <Route exact path="/Example" component={Example}/>
+            <Route exact path="/Music" component={Music}/>
+            <Route path="/channels/:id" component={ (props) => (<Channel {...props}/>)} />
         </div>
     </Router>,
 
