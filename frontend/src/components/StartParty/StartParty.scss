@@ -1,31 +1,4 @@
-.ui.small.circular.image {
-	width: auto;
-	height: 40px;
-}
-.ui.fixed.inverted.menu {
-	position: sticky;
-}
 
-.menu.item.right {
-	float: right;
-}
-
-.ui.container {
-	padding-top: 5px;
-	padding-bottom: 5px;
-}
-
-.ui.button {
-	height: 40px;	
-}
-
-
-.ui.orange.button {
-	height: 80px;
-	font-size: 30px;
-	width: 330px;
-	text-align: center;
-}
 .unauthorized{
 	top: 50%;
     position: absolute;
@@ -33,20 +6,37 @@
     width: 60%;
     height: 20%;
 }
+
 .olive.card{
 	text-align: center;
 	width: 100% !important;
 	height: 100% !important;
 	transform: translate(-50%, -50%);
 }
+
 .unauthorized_text{
 	top: 50%;
     position: relative;
     transform: translate(0,-50%);
 }
-.partyButtons{
-	transform: translate(0,200%);
+
+.ui.inverted.huge.form{
+	text-align: center;
 }
+
+.ui.blue.inverted.segment{
+	transform: translate(0,100%);
+}
+
+
 .ui.inverted.vertical.footer.segment {
 	transform: translate(0,150%);
+}
+
+.ui.modal{
+	text-align: center;
+}
+
+.modalbutton {
+    padding: 20px;
 }

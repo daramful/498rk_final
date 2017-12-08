@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Button, Card, Image } from 'semantic-ui-react'
+import { Button, Card, Image, Input, Form, Modal } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import $ from 'jquery';
+import styles from './StartParty.scss'
 
-import styles from './Dashboard.scss'
-
-class Dashboard extends Component {
+class StartParty extends Component {
 
     constructor(props) {
         super(props);
@@ -15,8 +15,11 @@ class Dashboard extends Component {
             track: "",
             artists: [],
             accessToken: "",
-            refreshToken: ""
-        }
+            refreshToken: "",
+            partyName: "",
+            channelCreated: false,
+            channelConflict: false
+        };
         this.logOut = this.logOut.bind(this);
     }
 
@@ -26,8 +29,8 @@ class Dashboard extends Component {
                 isLoggedIn: true,
                 userInfo: res.data.user.profile,
                 accessToken: res.data.user.accessToken,
-                refreshToken: res.data.user.refreshToken,
-            })
+                refreshToken: res.data.user.refreshToken
+            });
         }).catch( (err) => {
             this.setState({
                 isLoggedIn: false,
@@ -36,7 +39,7 @@ class Dashboard extends Component {
                 userPhoto: "",
                 accessToken: "",
                 refreshToken: ""
-            })
+            });
         });
 
     }
@@ -46,6 +49,10 @@ class Dashboard extends Component {
         return true;
     }
 
+    componentDidUpdate(prevProps, prevState){
+        console.log("channel created:")
+        console.log(this.state.channelCreated);
+    }
     viewProfile(event){
         axios.get('https://api.spotify.com/v1/me', 
             { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
@@ -57,6 +64,38 @@ class Dashboard extends Component {
         console.log(this.state.userInfo);
 
     }
+
+
+    inputPartyName(event){
+        this.setState({
+            partyName: event.target.value
+        });
+    }
+    formSubmit(event){
+        axios.post('/channels/'+this.state.partyName)
+            .then((res)=>{
+                this.setState({
+                channelCreated: true,
+                channelConflict: false
+            });
+            console.log("channel "+this.state.partyName+ " created");
+        }).catch((err)=>{
+            // prevent creating channels with same name
+            this.setState({
+                channelCreated: false,
+                channelConflict: true
+            })
+        });   
+    }
+    goToChannel(event){
+        axios.get('/channels/'+this.state.partyName)
+            .then((res)=>{
+                console.log("channel to "+this.state.partyName);
+        }).catch((err)=>{
+            console.log(err);
+        });
+    }
+
     logOut() {
         axios.get('/logout').then( (res) => {
             console.log("Logged out");
@@ -64,9 +103,12 @@ class Dashboard extends Component {
     }
 
     render() {
+        if (this.state.channelConflict){
+            return(<div>Existing Channel</div>)
+        }
         if (this.state.isLoggedIn) {
             return(
-                <div className="Dashboard">
+                <div className="StartParty">
                     <div className="ui fixed inverted menu">
                         <div className="ui container">  
                             <div className="menu item">
@@ -92,21 +134,33 @@ class Dashboard extends Component {
                     </div>
                     <div className="ui main text container">
                         <h1 className="ui header">
-                        Join Channel
+                        START YOUR OWN PARTY!!!
                         </h1> 
-                        <div className="partyButtons">
-                            <Link to="/startParty">
-                                <Button className="ui orange button">
-                                    Start New Party!
-                                </Button>
-                            </Link>
-                            <Link to="joinParty">
-                                <Button className="ui orange button">
-                                    Join a Party!
-                                </Button>
-                            </Link>
-                        </div>
                         
+                        <div className="ui blue inverted segment">
+                            <Form className="ui inverted huge form" onSubmit={(e)=>this.formSubmit(e)}>
+                                <div className="inline field">
+                                    <label>Enter Your Party Name:</label>
+                                    <Input className="ui input focus" type="text" placeholder="ex) AwesomeMusic"
+                                        onChange={(e)=>this.inputPartyName(e)}/>
+                                </div>
+                                        <Button className="ui inverted submit button">Create!</Button>
+                            </Form>
+                            <div>
+                                {this.state.channelCreated ? (
+                                    <Modal className="ui modal" open={true}>
+                                        <h1 className="ui header green">CHANNEL CREATED</h1>
+
+                                            <h1>Click to go to Channel "<span className="ui header red">{this.state.partyName}</span>"</h1>
+                                            <div className="modalbutton">
+                                                <Link to={'/channels/'+this.state.partyName}>
+                                                    <Button className="ui green button" onClick={(e)=>this.goToChannel(e)}>Go! </Button>
+                                                </Link>
+                                            </div>
+
+                                    </Modal> ) : (null) }
+                            </div>
+                        </div>
                     </div>
                     <div className="ui inverted vertical footer segment">
                         <div className="ui center aligned container">
@@ -147,4 +201,4 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard
+export default StartParty

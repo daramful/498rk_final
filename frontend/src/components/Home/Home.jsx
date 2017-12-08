@@ -11,7 +11,7 @@ class Home extends Component {
 		super(props);
 		console.log("constructor");
 		this.state={
-			loggedin: false,
+			isLoggedIn: false,
 			query: "",
 			track: "",
 			artists: []
@@ -58,37 +58,9 @@ class Home extends Component {
     }
 	logOut(event){
 		this.setState({
-			loggedin: false
+			isLoggedIn: false
 		});
 	}
-
-	search(event){
-		// console.log('this.state',this.state);
-		const BASE_URL = 'https://api.spotify.com/v1/search?';
-		const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=track&limit=3';
-		var accessToken = 'BQCln2xXqrpj6TgJO5Tm7zc-VLTrfvZBQ7GdpwET6Jq3wlnELXr1i_kYf3OmQ2mot7wvJG1Li2xXgkyLu4uMrBpTOxMHBPwnYA72CaYER9FO4f-aEldilhCXJsYKplFOOUfTkM4jAn88YxK9FhVxUpxcUY0qEnOPu0JRqoCiZeHappn1uA&refresh_token=AQAiPRg-cBM4Np6CHcxffxjSca8_t4HoZe_o9S-1QbIx2NoB1sy6CS9IRN7CQ2VqiUj34cXJgCtIcVqScucCwiaEYMsknTkwf-42Dvwz_pSNqO44VHGBcm13UeLTRuDdMt8'
-        var myOptions = {
-			method: 'GET',
-			headers: {
-				'Authorization': 'Bearer ' + accessToken
-			},
-			mode: 'cors',
-			cache: 'default'
-		};
-
-		fetch(FETCH_URL, myOptions)
-			.then((response) => response.json())
-			.then((data) =>{
-                console.log(data.tracks.items[0]);
-				this.setState({ 
-					track : data.tracks.items[0].name,
-					artists : data.tracks.items[0].artists
-				});
-			}).catch(function(error){
-				console.log(error);
-			})
-	}
-
     render() {
     	
         return(

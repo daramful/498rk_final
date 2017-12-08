@@ -7,6 +7,9 @@ import Home from './components/Home/Home.jsx';
 import Login from './components/Login/Login.jsx';
 // import Signup from './components/Register/Register.jsx';
 import Dashboard from './components/Dashboard/Dashboard.jsx';
+import StartParty from './components/StartParty/StartParty.jsx';
+// import JoinParty from './components/JoinParty/JoinParty.jsx';
+import Channel from './components/Channel/Channel.jsx';
 
 import styles from './styles/main.scss';
 
@@ -16,6 +19,8 @@ render(
             <Route exact path="/" component={Home}/>
             <Route exact path="/login" component={Login}/>
 			<Route exact path="/dashboard" component={Dashboard}/>
+			<Route exact path="/startParty" component={StartParty}/>
+			<Route exact path="/channels/:id" component={Channel}/>
         </Switch>
     </Router>,
     document.getElementById('react-app')

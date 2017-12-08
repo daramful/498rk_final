@@ -81,7 +81,7 @@ class Login extends Component {
 
                     <p>{this.state.message}</p>
                     <Input type="submit" />
-                    <a href="/auth/spotify">Login with Spotify</a>
+                    <Button className="ui inverted small green button"><a href="/auth/spotify">Login with Spotify</a></Button>
                     <h4>No account yet? Click <Link to="/register">here</Link> to Register!</h4>
 
                     <Link to="/dashboard"><p>Go to Dashboard</p></Link>
@@ -92,4 +92,5 @@ class Login extends Component {
 }
 }
 
+// <form action="/auth/spotify" method="get"> : Login with Spotify
 export default Login

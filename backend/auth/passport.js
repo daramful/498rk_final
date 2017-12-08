@@ -30,28 +30,14 @@ module.exports = function(passport) {
         // usernameField : 'email',
         // passwordField : 'password',
     },
-    function(accessToken, refreshToken, profile, done){
-        process.nextTick(function(){
-            return done(null, profile);
-        });
-    
-    // function(email, password, done) {
-    //     User.findOne({'email' : email}, function(err, user) {
-    //         if ( err ) {
-    //             return done(err);
-    //         } else if ( user ) {
-    //             return done(null, false);
-    //         } else {
-    //             var newUser = new User();
-
-    //             newUser.email = email;
-    //             newUser.password = newUser.generateHash(password);
-
-    //             newUser.save(function(err) {
-    //                 return done(null, newUser);
-    //             });
-    //         }
-    //     });
+        function(accessToken, refreshToken, profile, done){
+            process.nextTick(function(){
+                var newUser = new User();
+                newUser.profile = profile;
+                newUser.accessToken = accessToken;
+                newUser.refreshToken = refreshToken;
+                return done(null, newUser);
+            });
     }));
 
     // Login Strategy

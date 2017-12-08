@@ -33,7 +33,12 @@ app.route('/login').get(function(req, res) {
 app.route('/dashboard').get(function(req,res) {
   return res.sendFile(path.join(__dirname, './backend/static/index.html'));
 })
-
+app.route('/startParty').get(function(req,res) {
+  return res.sendFile(path.join(__dirname, './backend/static/index.html'));
+})
+// app.route('/joinParty').get(function(req,res) {
+//   return res.sendFile(path.join(__dirname, './backend/static/index.html'));
+// })
 /* New things ================================================================ */
 
 require('./backend/models').connect(config.dbUri);
@@ -59,10 +64,3 @@ app.use('/', require('./backend/routes/api')(router, passport));
 app.listen(8888, () => {
   console.log('Server is running on http://localhost:8888');
 });
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    return res.status(401).json({ message: "unable to auth" });
-}
