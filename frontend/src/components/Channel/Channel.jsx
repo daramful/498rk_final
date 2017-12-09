@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Input, Icon,Dropdown,Card,Image,Search} from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-
+import SongList from './SongList.jsx'
 // import styles from './Channel.scss'
 
 class Channel extends Component {
@@ -18,7 +18,10 @@ class Channel extends Component {
 			query: "",
 			songName: "",
 			artists: [],
-            channelName: ""
+            channelName: "",
+            keyword: "",
+            track: []
+
 		};
 	}
 
@@ -62,14 +65,18 @@ class Channel extends Component {
     }
 
     search(event){
+        this.setState({
+            keyword: event.target.value
+        })
         const BASE_URL = 'https://api.spotify.com/v1/search?';
-        const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=track&limit=3';
+        const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=track&limit=30';
         axios.get(FETCH_URL, 
             { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
             .then((res)=>{
                 this.setState({
-                    songName: res.data.tracks.items[0].name,
-                    artists: res.data.tracks.items[0].artists
+                    //songName: res.data.tracks.items[0].name,
+                    //artists: res.data.tracks.items[0].artists
+                    track: res.data.tracks.items
                 });
                 console.log(res);
             }).catch((err)=>{
@@ -78,8 +85,14 @@ class Channel extends Component {
     }
 
     addToPlaylist(event){
-        var a = "AAA";
-        axios.put('/channels/'+this.state.channelName,{playList:a})
+        var a = [{"songName" : "AAA", "artist" : "YJ"}]
+
+
+
+        axios.put('/channels/'+this.state.channelName,{ playList: [
+            a,
+            ]
+        })
             .then((res)=>{
             console.log("added song");
         }).catch((err)=>{
@@ -141,6 +154,17 @@ class Channel extends Component {
 		});
 	}
     render() {
+
+        const mapToComponents = (data) => {
+        
+            if(this.state.keyword == '') return [];
+
+            return data.map((eachData, index) => {
+                return (  <SongList channel = { this.state.channelName } track = { eachData } key={ index }/>  );
+            });
+        };
+
+
     	if (this.state.isLoggedIn){
             return(
                 <div className="home">
@@ -173,12 +197,14 @@ class Channel extends Component {
                 		</h1> 
 
                         <div>
-                            <input type="text" placeholder="search for a song to add to your playlist" ref="query" onChange={(e) => {this.search(e)}}/>
-                                <div className="search result"> 
-                                    <p>Searched Song: {this.state.track}</p>
-                                    <p>by: {this.state.artists.map((i)=>{return (<div>{i.name}</div>)})}</p>
-                                </div>
+                            <Input type="text" placeholder="search for a song to add to your playlist" ref="query" onChange={(e) => {this.search(e)}}/>
+                             <div className="recommendedLists">
+                                { mapToComponents(this.state.track) }
+                            </div>  
                         </div>
+
+
+
                         <Button onClick={(e)=>this.addToPlaylist(e)}>add song AAA</Button>
                         <Button onClick={(e)=>this.addToPlaylist2(e)}>add song BBB</Button>
                         <Button onClick={(e)=>this.addToPlaylist3(e)}>add song CCC</Button>
