@@ -36,9 +36,9 @@ app.route('/dashboard').get(function(req,res) {
 app.route('/startParty').get(function(req,res) {
   return res.sendFile(path.join(__dirname, './backend/static/index.html'));
 })
-// app.route('/joinParty').get(function(req,res) {
-//   return res.sendFile(path.join(__dirname, './backend/static/index.html'));
-// })
+app.route('/joinParty').get(function(req,res) {
+  return res.sendFile(path.join(__dirname, './backend/static/index.html'));
+})
 /* New things ================================================================ */
 
 require('./backend/models').connect(config.dbUri);
@@ -47,10 +47,14 @@ require('./backend/auth/passport')(passport);
 // Initialize cookie sessions
 app.use(cookieParser());
 app.use(methodOverride());
-app.use(session({ secret: 'keyboard cat' }));
-// app.use(cookieSession({
-//   keys: ['asdf', 'asdf']
-// }));
+// app.use(session({ secret: 'keyboard cat' }));
+app.use(cookieSession({
+  keys: ['asdf', 'asdf']
+}));
+
+
+
+
 
 // Initialize Passport
 app.use(passport.initialize()); // Create an instance of Passport

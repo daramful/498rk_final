@@ -1,0 +1,42 @@
+
+.unauthorized{
+	top: 50%;
+    position: absolute;
+    left: 50%;
+    width: 60%;
+    height: 20%;
+}
+
+.olive.card{
+	text-align: center;
+	width: 100% !important;
+	height: 100% !important;
+	transform: translate(-50%, -50%);
+}
+
+.unauthorized_text{
+	top: 50%;
+    position: relative;
+    transform: translate(0,-50%);
+}
+
+.ui.inverted.huge.form{
+	text-align: center;
+}
+
+.ui.blue.inverted.segment{
+	transform: translate(0,100%);
+}
+
+
+.ui.inverted.vertical.footer.segment {
+	transform: translate(0,150%);
+}
+
+.ui.modal{
+	text-align: center;
+}
+
+.modalbutton {
+    padding: 20px;
+}
