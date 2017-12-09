@@ -3,33 +3,100 @@ import { Button, Input, Icon,Dropdown,Card,Image,Search} from 'semantic-ui-react
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import SongList from './SongList.jsx'
+import SidebarCategory from './SidebarCategory.jsx';
+import Music from './Music.jsx';
 // import styles from './Channel.scss'
 
 class Channel extends Component {
 
-	constructor(props){
-		super(props);
-		console.log("constructor");
-		this.state={
-			isLoggedIn: false,
+    constructor(props){
+        super(props);
+        console.log("constructor");
+        this.state={
+            play: false,
+            pause: true,
+            updated: false,
+            isLoggedIn: false,
             userInfo: [],
             accessToken: "",
             refreshToken: "",
-			query: "",
-			songName: "",
-			artists: [],
+            query: "",
+            songName: "",
+            artists: [],
             channelName: "",
             keyword: "",
-            track: []
+            categories: [],
+            track: [],
+            audioList: [],
+            currSongKey: 0
 
-		};
-	}
+        };
 
-	componentWillMount(){
-        console.log("componentWillMount");
-       
+        this.playlists = [];
+
+        this.play = this.play.bind(this);
+        this.pause = this.pause.bind(this);
+        this.playNextSong = this.playNextSong.bind(this);
     }
-    
+
+      playNextSong(){
+
+        //this.setState({
+        //  songList: arr
+        //});
+        
+        this.pause()
+        var currKey = this.state.currSongKey
+        currKey += 1
+
+        this.setState({
+            currSongKey: currKey
+        })
+        this.play()
+        //this.songArr[1].play();
+      }
+      
+
+      play(){
+
+        alert("play song " + this.state.currSongKey)
+        //console.log("playyyyyy")
+
+        this.setState({
+          play: true,
+          pause: false
+        });
+
+        this.state.audioList[this.state.currSongKey].play()
+      }
+      
+      pause(){
+        alert("pause song " + this.state.audioList)
+        this.setState({ play: false, pause: true });
+        this.state.audioList[this.state.currSongKey].currentTime = 0;
+        this.state.audioList[this.state.currSongKey].pause();
+        alert("pause song " + this.state.audioList)
+      }
+
+    componentWillMount() {
+
+        console.log('Component WILL MOUNT!')
+
+        axios.get('/channels').then( (res) => {
+            //console.log(res.data.data.playList);
+            //let playlists = [];
+            res.data.data.playList.map((value, key) => this.playlists.push(new Audio(value.url)));
+
+            this.setState((prevState) => {
+                return { audioList: this.playlists, categories: res.data.data.playList }
+            }, () => console.log(this.playlists));
+
+        }).catch( (err) => {
+            console.log(err);
+        });
+
+    }   
+
     componentDidMount() {
         axios.get('/profile').then( (res) => {
             this.setState({
@@ -53,12 +120,28 @@ class Channel extends Component {
     
     shouldComponentUpdate(nextProps, nextState){
         console.log("shouldcomponentupdate");
-        return true;
+        return (this.state != nextState);
     }
 
     componentDidUpdate(prevProps, prevState){
-        console.log(this.state.songName);
-        console.log(this.state.artists[0]);
+        //console.log(this.state.songName);
+        //console.log(this.state.artists[0]);
+
+
+        console.log("did update")
+
+        axios.get('/channels').then( (res) => {
+            //console.log(res.data.data.playList);
+            //let playlists = [];
+            res.data.data.playList.map((value, key) => this.playlists.push(new Audio(value.url)));
+
+            this.setState((prevState) => {
+                return { audioList: this.playlists, categories: res.data.data.playList }
+            }, () => console.log(this.playlists));
+
+        }).catch( (err) => {
+            console.log(err);
+        });
     }
     
     componentWillUnmount(){
@@ -84,58 +167,6 @@ class Channel extends Component {
             });
     }
 
-    addToPlaylist(event){
-        var a = [{"songName" : "AAA", "artist" : "YJ"}]
-
-
-
-        axios.put('/channels/'+this.state.channelName,{ playList: [
-            a,
-            ]
-        })
-            .then((res)=>{
-            console.log("added song");
-        }).catch((err)=>{
-            console.log(err);
-        });   
-    }
-    addToPlaylist2(event){
-        var b = "BBB";
-        axios.put('/channels/'+this.state.channelName,{playList:b})
-            .then((res)=>{
-            console.log("added song");
-        }).catch((err)=>{
-            console.log(err);
-        });   
-    }
-    addToPlaylist3(event){
-        var c = "CCC";
-        axios.put('/channels/'+this.state.channelName,{playList:c})
-            .then((res)=>{
-            console.log("added song");
-        }).catch((err)=>{
-            console.log(err);
-        });   
-    }
-//         fetch(FETCH_URL, myOptions)
-//             .then((response) => response.json())
-//             .then((data) =>{
-//                 console.log(data.tracks.items[0]);
-//                 this.setState({ 
-//                     track : data.tracks.items[0].name,
-//                     artists : data.tracks.items[0].artists
-//                 });
-//             }).catch(function(error){
-//                 console.log(error);
-//             })
-// <Search className="ui search" onSearchChange={(e)=>this.search(e)} results={this.state.artists} id={i}>
-//                             <div className="da">
-//                                 <Input className="prompt" type="text" ref="query" placeholder="search for a song..."/>
-//                                 <Icon className="search icon"></Icon>
-//                             </div>
-//                             <div className="results"></div>
-//                         </Search>
-
 
     viewProfile(event){
         axios.get('https://api.spotify.com/v1/me', 
@@ -148,11 +179,11 @@ class Channel extends Component {
         console.log(this.state.userInfo);
 
     }
-	logOut(event){
-		this.setState({
-			loggedin: false
-		});
-	}
+    logOut(event){
+        this.setState({
+            loggedin: false
+        });
+    }
     render() {
 
         const mapToComponents = (data) => {
@@ -160,23 +191,22 @@ class Channel extends Component {
             if(this.state.keyword == '') return [];
 
             return data.map((eachData, index) => {
-                return (  <SongList channel = { this.state.channelName } track = { eachData } key={ index }/>  );
+                return (  <SongList track = { eachData } key={ index }/>  );
             });
         };
 
-
-    	if (this.state.isLoggedIn){
+        if (this.state.isLoggedIn){
             return(
                 <div className="home">
-                	<div className="ui fixed inverted menu">
-                		<div className="ui container">	
-            				<div className="menu item">
-                				MIC DROP
-        					</div>
-        					<div className="menu item">
+                    <div className="ui fixed inverted menu">
+                        <div className="ui container">  
+                            <div className="menu item">
+                                MIC DROP
+                            </div>
+                            <div className="menu item">
                                 Home
                             </div>
-            				<div className="menu item">
+                            <div className="menu item">
                                 About
                             </div>
                             <div className="menu item right" />
@@ -189,12 +219,12 @@ class Channel extends Component {
                                     Log Out
                                 </Button>   
                             </Link>
-                	   </div>
+                       </div>
                    </div>
                     <div className="ui main text container">
-                    	<h1 className="ui header">
-                    		Welcome to Channel "<span className="ui header red">{this.state.channelName}</span>"
-                		</h1> 
+                        <h1 className="ui header">
+                            Welcome to Channel "<span className="ui header red">{this.state.channelName}</span>"
+                        </h1> 
 
                         <div>
                             <Input type="text" placeholder="search for a song to add to your playlist" ref="query" onChange={(e) => {this.search(e)}}/>
@@ -205,31 +235,31 @@ class Channel extends Component {
 
 
 
-                        <Button onClick={(e)=>this.addToPlaylist(e)}>add song AAA</Button>
-                        <Button onClick={(e)=>this.addToPlaylist2(e)}>add song BBB</Button>
-                        <Button onClick={(e)=>this.addToPlaylist3(e)}>add song CCC</Button>
-                        
-
-                            
-                	</div>
-                	<div className="ui inverted vertical footer segment">
-                		<div className="ui center aligned container">
-                			<div className="ui vertical inverted small divided list">
-                				<div className="asdsad">
-                					<h2 className="ui inverted header">Developers</h2>
-                					<p>hlee295</p>
-                					<p>jsong78</p>
-                					<p>ykim164</p>
-                					<p>hpark125</p>
-            					</div>
-            				</div>
-            				<div className="ui inverted section divider"></div>
-            				<div className="ui horizontal inverted small divided list">
-            					<p>CS498 RK1 Final Project</p>
-            					<p>University of Illinois at Urbana-Champaign</p>
-            				</div>
-        				</div>
-    				</div>
+                        <SidebarCategory categories={this.state.categories} />
+                        <Button onClick = { this.play }>Play</Button>
+                        <Button onClick = {this.pause}>Pause</Button>
+                        <Button onClick = {this.playNextSong}>Next</Button>
+                   
+          
+                    </div>
+                    <div className="ui inverted vertical footer segment">
+                        <div className="ui center aligned container">
+                            <div className="ui vertical inverted small divided list">
+                                <div className="asdsad">
+                                    <h2 className="ui inverted header">Developers</h2>
+                                    <p>hlee295</p>
+                                    <p>jsong78</p>
+                                    <p>ykim164</p>
+                                    <p>hpark125</p>
+                                </div>
+                            </div>
+                            <div className="ui inverted section divider"></div>
+                            <div className="ui horizontal inverted small divided list">
+                                <p>CS498 RK1 Final Project</p>
+                                <p>University of Illinois at Urbana-Champaign</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )
         }else{
