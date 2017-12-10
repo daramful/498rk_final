@@ -5,7 +5,7 @@
 1. [Tips](#tips)
 
 ## Tips
-git clone https://github.com/daramful/498rk_final
-cd 498rk_final
-npm install
-npm start
+- git clone https://github.com/daramful/498rk_final
+- cd 498rk_final
+- npm install
+- npm start
