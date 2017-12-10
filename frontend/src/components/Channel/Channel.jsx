@@ -32,27 +32,47 @@ class Channel extends Component {
 
         };
 
-        this.playlists = [];
+        //this.playlists = [];
 
         this.play = this.play.bind(this);
         this.pause = this.pause.bind(this);
         this.playNextSong = this.playNextSong.bind(this);
+        this.playPrevSong = this.playPrevSong.bind(this);
     }
+
+      playPrevSong(){
+
+        //this.setState({
+        //  songList: arr
+        //});
+
+        var currKey = this.state.currSongKey
+        currKey -= 1
+
+        this.setState({
+            currSongKey: currKey
+        })
+
+        console.log("current key " + this.state.currSongKey)
+
+        //this.songArr[1].play();
+      }
 
       playNextSong(){
 
         //this.setState({
         //  songList: arr
         //});
-        
-        this.pause()
+
         var currKey = this.state.currSongKey
         currKey += 1
 
         this.setState({
             currSongKey: currKey
         })
-        this.play()
+
+        console.log("current key " + this.state.currSongKey)
+
         //this.songArr[1].play();
       }
       
@@ -71,11 +91,16 @@ class Channel extends Component {
       }
       
       pause(){
-        alert("pause song " + this.state.audioList)
-        this.setState({ play: false, pause: true });
-        this.state.audioList[this.state.currSongKey].currentTime = 0;
+        //alert("pause song " + this.state.audioList)
+        //this.setState({ play: false, pause: true });
+        //this.state.audioList[this.state.currSongKey].currentTime = 0;
+        this.setState({
+          play: false,
+          pause: true
+        });
+
         this.state.audioList[this.state.currSongKey].pause();
-        alert("pause song " + this.state.audioList)
+        //alert("pause song " + this.state.audioList)
       }
 
     componentWillMount() {
@@ -84,12 +109,12 @@ class Channel extends Component {
 
         axios.get('/channels').then( (res) => {
             //console.log(res.data.data.playList);
-            //let playlists = [];
-            res.data.data.playList.map((value, key) => this.playlists.push(new Audio(value.url)));
+            let playlists = [];
+            res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
 
             this.setState((prevState) => {
-                return { audioList: this.playlists, categories: res.data.data.playList }
-            }, () => console.log(this.playlists));
+                return { audioList: playlists, categories: res.data.data.playList }
+            }, () => console.log(this.state.audioList));
 
         }).catch( (err) => {
             console.log(err);
@@ -98,6 +123,7 @@ class Channel extends Component {
     }   
 
     componentDidMount() {
+
         axios.get('/profile').then( (res) => {
             this.setState({
                 isLoggedIn: true,
@@ -124,26 +150,25 @@ class Channel extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
-        //console.log(this.state.songName);
-        //console.log(this.state.artists[0]);
-
+/*
 
         console.log("did update")
 
         axios.get('/channels').then( (res) => {
             //console.log(res.data.data.playList);
-            //let playlists = [];
-            res.data.data.playList.map((value, key) => this.playlists.push(new Audio(value.url)));
+            let playlists = [];
+            res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
 
             this.setState((prevState) => {
-                return { audioList: this.playlists, categories: res.data.data.playList }
-            }, () => console.log(this.playlists));
+                return { audioList: playlists, categories: res.data.data.playList }
+            }, () => console.log(this.state.audioList));
 
         }).catch( (err) => {
             console.log(err);
         });
+*/
     }
-    
+
     componentWillUnmount(){
     }
 
@@ -184,6 +209,7 @@ class Channel extends Component {
             loggedin: false
         });
     }
+
     render() {
 
         const mapToComponents = (data) => {
@@ -236,6 +262,8 @@ class Channel extends Component {
 
 
                         <SidebarCategory categories={this.state.categories} />
+
+                        <Button onClick = {this.playPrevSong}>Prev</Button>
                         <Button onClick = { this.play }>Play</Button>
                         <Button onClick = {this.pause}>Pause</Button>
                         <Button onClick = {this.playNextSong}>Next</Button>

@@ -16,15 +16,15 @@ class SongList extends Component {
 
     clickMusicHandler() {
         
-        console.log(this.props.channel);
+        //console.log(this.props.channel);
 
-        var musicObject = [{"songName" : this.props.track.name, 
-        "artist" : this.props.track.artists[0].name,
-        "url" : this.props.track.preview_url}]
+        axios.put('/channels/'+'test', {
 
-        axios.put('/channels/'+ 'fake',{ playList: [
-            musicObject,
-            ]
+            playList: {
+                songName: this.props.track.name,
+                artist: this.props.track.artists[0].name,
+                url: this.props.track.preview_url
+            }
         })
             .then((res)=>{
             console.log("added song");
