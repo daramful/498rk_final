@@ -61,8 +61,34 @@ module.exports = function(router, passport) {
                         data:[]
                     })
                 }
-            })
-            
+            })  
+    });
+
+    router.get('/channels', isLoggedIn, function(req, res) {
+        channel.find({}, function(err, channeldata) {
+            var arr = []
+            var channelMap = {};
+            console.log('channelMap:');
+            console.log(channelMap);
+            channeldata.forEach((chn)=> {
+                console.log(chn)
+                arr = chn
+            });
+                if(err || channeldata === null){
+                    res.status(404).send({
+                        message: 'Channel Not Found',
+                        data: []
+                    })
+                }
+                else {
+                    res.status(200).json({
+                        message: "channel to success",
+                        data: arr
+                    })
+                }
+            console.log(arr);
+            // res.send(userMap);  
+        });
     });
 
     router.get('/channels/:id',
