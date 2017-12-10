@@ -5,5 +5,7 @@
 1. [Tips](#tips)
 
 ## Tips
-  - Start early! This is first MP that uses React so start ahead.
-  - Please DO NOT delete the gitignore file from the project
+git clone https://github.com/daramful/498rk_final
+cd 498rk_final
+npm install
+npm start
