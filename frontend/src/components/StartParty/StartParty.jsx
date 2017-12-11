@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Button, Card, Image, Input, Form, Modal } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import $ from 'jquery';
 import styles from './StartParty.scss'
 
 class StartParty extends Component {

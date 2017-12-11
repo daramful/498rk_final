@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Input, Icon,Dropdown,Card} from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
-import $ from 'jquery'
 
 
 

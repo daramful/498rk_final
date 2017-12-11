@@ -3,6 +3,8 @@ import { Button, Input, Icon, Dropdown, Card, Grid, Segment } from 'semantic-ui-
 import { Link } from 'react-router-dom'
 import $ from 'jquery'
 import axios from 'axios'
+import styles from './Channel.scss'
+
 export class SidebarCategory extends React.Component {
 
     constructor(props) {
@@ -39,27 +41,27 @@ export class SidebarCategory extends React.Component {
 
     render() {
               return (
-            <div className="ui icon message">
-            <div className="item">
-                <div className="content" >
-                <a className="header">
-                {this.props.categories.map((category, key) =>(
-                    <div key={key} className="ui divider" style={{padding: 1 + 'em'} }>
-                        <i className="large spotify middle aligned icon"></i>
-                        <span>{category.songName}</span>- <span>{category.artist}</span>
-                        <Button
-                                onClick = { (e) => this.clickSongListHandler(category._id) }
-                             >X</Button>
-                    </div>                            
-                    ))}
-                </a>
-                <div className="ui divider"></div>
-                </div>
-            </div>
-            </div>    
+                    
+                    <Card.Group>
+                    <Card className="songAppended">
+                      <Card.Content>
+                      {this.props.categories.map((category, key) =>(
+                            <div key={key} style={{padding: 1 + 'em'} }>
+                      <Card.Header>
+                          <Button id="xx" onClick = { (e) => this.clickSongListHandler(category._id)}>X</Button>                        
+                      </Card.Header>
+                        <Card.Description>
+                        <span>{category.songName}</span> - By <span>{category.artist}</span>
+                        <div className="ui divider"></div>
+                        </Card.Description>
+                        </div>                            
+                        ))}                        
+                      </Card.Content>
+                    </Card>
+                    <div className="ui divider"></div>
+                    </Card.Group>         
+                    
         );
-
-
 
     }
 }

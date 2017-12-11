@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Input, Icon,Dropdown,Card} from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
-import $ from 'jquery'
 import axios from 'axios'
 
 class SongList extends Component {  
@@ -27,6 +26,7 @@ class SongList extends Component {
             }
         }).then((res)=>{
             this.props.onMusicClick(this.props.track);
+
             console.log("added song");
         }).catch((err)=>{
             console.log(err);
@@ -54,7 +54,7 @@ class SongList extends Component {
                     <Card className = "RecSongList"
                     onClick = { this.clickMusicHandler }
                     value = { this.props.track.preview_url} >
-                        <Card.Content>
+                        <Card.Content style={{display: 'block'}}>
                             <Card.Header className="RecSongList_header">
                                 { this.props.track.name }
                             </Card.Header>
