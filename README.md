@@ -78,7 +78,7 @@ Other:
 3. Run the dev server:
 `npm run dev`
 4. Open a browser and go to `http://localhost:8080/` to view your page. You should see "Welcome to MP2!".
-5. Open up `source/index.js` and `source/html/index.html` and read the comments in those files to get an idea of how to start. *We will not answer questions that are already answered by the comments there.*
+5. Open up `source/server.js` and `source/html/index.html` and read the comments in those files to get an idea of how to start. *We will not answer questions that are already answered by the comments there.*
 
 ## Submission Details
 [Submission Form](https://docs.google.com/forms/d/e/1FAIpQLSfFhk_QzJJ1fRn4WV3_hdCwpnTWTyMKBRqFll_AsTHNqGQlMQ/viewform?usp=sf_link)
