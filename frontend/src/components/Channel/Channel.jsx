@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
-import { Button, Input, Icon, Dropdown, Card, Image, Search, Segment, Grid} from 'semantic-ui-react'
+import { Button, Input, Icon, Dropdown, Card, Grid, Segment, Image } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import SongList from './SongList.jsx'
 import SidebarCategory from './SidebarCategory.jsx';
 import Music from './Music.jsx';
+import Pusher from 'pusher-js';
+
 // import styles from './Channel.scss'
 
-class Channel extends Component {
-
+class Channel extends React.Component {
     constructor(props){
         super(props);
         console.log("constructor");
-        this.state={
+        this.state = {
             play: false,
             pause: true,
             updated: false,
@@ -28,58 +29,180 @@ class Channel extends Component {
             categories: [],
             track: [],
             audioList: [],
+            isPlaying: false,
+            autoplayOn: false,
             currSongKey: 0,
             value: "",
             results: []
-
         };
 
         this.play = this.play.bind(this);
         this.pause = this.pause.bind(this);
         this.playNextSong = this.playNextSong.bind(this);
+        this.autoPlayNextSong = this.autoPlayNextSong.bind(this);
         this.playPrevSong = this.playPrevSong.bind(this);
         this.addSong=this.addSong.bind(this);
+        this.deleteSong=this.deleteSong.bind(this);
+        this.stop=this.stop.bind(this);
+
+        this.setAutoPlay = this.setAutoPlay.bind(this);
+
+        this.autoplayStatus = false;
     }
+
+
+        deleteSong(e) {
+            //alert("Song deleted " + e);
+            var i = 'notchanged';
+
+            axios.get('/channels/'+this.state.channelName)
+                .then((res)=>{
+                console.log(res);
+                var newSongs = res.data.data.playList;
+                console.log("current songs on db")
+                console.log(newSongs)
+                console.log("original long list")
+                console.log(this.state.categories)
+
+                for (i = 0; i < this.state.categories.length; i++) { 
+                    //console.log( i + "  " + this.state.categories[i]._id + "  "  + newSongs[i]._id)
+                    if(newSongs[i] === undefined) { 
+                        break;
+
+                    } else {
+        
+                        if(this.state.categories[i]._id !== newSongs[i]._id) { 
+
+                            break;
+                        }
+                    }
+            
+                }
+
+                console.log("deleted index " + i)
+
+                var playlists = this.state.audioList;
+                playlists.splice(i, 1);
+
+                this.setState({
+                    audioList: playlists,
+                    categories: res.data.data.playList
+                });
+                console.log(this.state.audioList)
+                }).catch((err)=>{
+                    console.log(err);
+            });
+
+
+        }
 
       playPrevSong(){
 
-        var currKey = this.state.currSongKey
-        currKey -= 1
+        this.state.audioList[this.state.currSongKey].currentTime = 0;
+
+        this.state.audioList[this.state.currSongKey].pause();
+
+        if(this.state.currSongKey == 0) currKey = this.state.audioList.length - 1;
+
+        else {
+            var currKey = this.state.currSongKey
+            currKey -= 1
+        }
 
         this.setState({
             currSongKey: currKey
         })
 
-        console.log("current key " + this.state.currSongKey)
+        this.state.audioList[currKey].play()
+
       }
 
       playNextSong(){
 
-        var currKey = this.state.currSongKey
-        currKey += 1
 
-        this.setState({
-            currSongKey: currKey
-        })
+            this.state.audioList[this.state.currSongKey].currentTime = 0;
 
-        console.log("current key " + this.state.currSongKey)
+            this.state.audioList[this.state.currSongKey].pause();
 
+            if(this.state.currSongKey == this.state.audioList.length - 1) currKey = 0;
+
+                
+            else {
+                var currKey = this.state.currSongKey
+                currKey += 1
+            }
+
+            this.setState({
+                currSongKey: currKey
+            })
+
+            this.state.audioList[currKey].play()
+            //{ this.play() }
       }
       
+      autoPlayNextSong() {
+
+            if(this.state.autoplayOn === false) { }
+
+            else {
+                this.state.audioList[this.state.currSongKey].currentTime = 0;
+
+                this.state.audioList[this.state.currSongKey].pause();
+
+                if(this.state.currSongKey == this.state.audioList.length - 1) currKey = 0;
+
+                    
+                else {
+                    var currKey = this.state.currSongKey
+                    currKey += 1
+                }
+
+                this.setState({
+                    currSongKey: currKey
+                })
+
+                { this.play() }
+            }
+
+
+      }
 
       play(){
 
-        alert("play song " + this.state.currSongKey)
-
         this.setState({
+          isPlaying: true,
           play: true,
           pause: false
         });
 
         this.state.audioList[this.state.currSongKey].play()
+
+        var currKey = this.state.currSongKey;
+        var currSong = this.state.audioList[this.state.currSongKey];
+        var nextSong = this.state.audioList[this.state.currSongKey + 1]
+    
+        var currentAutoPlay = this.state.autoplayOn;
+
+        var stopSong = function(){ this.stop() }
+        var nextSong = function(){ this.playNextSong() }
+
+        if(this.state.autoplayOn === true) {
+            setTimeout(this.autoPlayNextSong, this.state.audioList[this.state.currSongKey].duration * 1010)
+        }
       }
       
-      pause(){
+
+    stop() {
+            
+        this.state.audioList[this.state.currSongKey].currentTime = 0;
+
+        //this.state.audioList[this.state.currSongKey].pause();
+        { this.pause() }
+
+    }
+
+    pause(){
+
         this.setState({
           play: false,
           pause: true
@@ -88,11 +211,42 @@ class Channel extends Component {
         this.state.audioList[this.state.currSongKey].pause();
       }
 
+
+    setAutoPlay(e) {
+
+        var fv = false;
+        var tv = true;
+
+        console.log(e.target.value)
+
+        if(e.target.value == "on") {
+            this.setState({
+                autoplayOn : tv
+
+            });
+
+        } 
+
+        if(e.target.value == "off") {
+            this.setState({
+                autoplayOn : fv
+            });
+        }
+
+    }
+
+
     componentWillMount() {
+        this.pusher = new Pusher('64fe71b3db1ab2a99821',{cluster: "us2", encrypted: true});
+        this.channel = this.pusher.subscribe('mychannel');
         console.log('component will mount');
     }   
 
     componentDidMount() {
+        this.channel.bind('created', this.updateEvents);
+        this.channel.bind('modified', this.addSong);
+        this.channel.bind('deleted', this.updateEvents);
+
 
         axios.get('/profile').then( (res) => {
             this.setState({
@@ -112,7 +266,9 @@ class Channel extends Component {
             
             let playlists = [];
             res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
+            //console.log("channel id " + res.data.data._id)
             this.setState({
+                channelID: res.data.data._id,
                 audioList: playlists,
                 categories: res.data.data.playList,
                 channelName: this.props.match.params.id
@@ -134,18 +290,28 @@ class Channel extends Component {
 
     componentDidUpdate(prevProps, prevState){
         console.log("component did update");
-        console.log(this.state.track);
+
+        this.autoplayStatus = this.state.autoplayOn;
+        console.log('current auto play status', this.autoplayStatus);
+
+
     }
 
     componentWillUnmount(){
+        this.channel.unbind();
+        this.pusher.unsubscribe(this.channel);
     }
 
-    search(e){
+    updateEvents(data){
+        //var new Array
+    }
+
+    search(event){
         this.setState({
-            keyword: e.target.value
+            keyword: event.target.value
         });
         const BASE_URL = 'https://api.spotify.com/v1/search?';
-        const FETCH_URL = BASE_URL + 'q=' + e.target.value + '&type=track&limit=3';
+        const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=track&limit=30';
         axios.get(FETCH_URL, 
             { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
             .then((res)=>{
@@ -167,13 +333,14 @@ class Channel extends Component {
                 console.log(err);
             });
         console.log(this.state.userInfo);
-
     }
+
     logOut(event){
         this.setState({
             loggedin: false
         });
     }
+
     addSong(){
 
         axios.get('/channels/'+this.state.channelName)
@@ -186,6 +353,7 @@ class Channel extends Component {
                 audioList: playlists,
                 categories: res.data.data.playList
             });
+            console.log(this.state.audioList)
             }).catch((err)=>{
                 console.log(err);
         });
@@ -197,22 +365,22 @@ class Channel extends Component {
             if(this.state.keyword == '') return [];
 
             return data.map((eachData, index) => {
-                return (  <SongList key={ index } track = { eachData } channelName={this.state.channelName} onMusicClick={this.addSong}/> );
+                return (  <SongList key={ index } track = { eachData } channelName={ this.state.channelName } onMusicClick={ this.addSong }/> );
             });
         };
 
-        if (this.state.isLoggedIn){
+        if (this.state.isLoggedIn){            
             return(
                 <div className="home">
                     <div className="ui fixed inverted menu">
                         <div className="ui container">  
-                            <div className="menu item">
-                                MIC DROP
+                            <div className="menu item default">
+                                <i id="mic" className="fa fa-microphone" aria-hidden="true"> </i> DROP
                             </div>
-                            <div className="menu item">
+                            <div className="menu item default">
                                 Home
                             </div>
-                            <div className="menu item">
+                            <div className="menu item default">
                                 About
                             </div>
                             <div className="menu item right" />
@@ -246,35 +414,48 @@ class Channel extends Component {
                             <div>
                                 <Button onClick = {this.playPrevSong}>Prev</Button>
                                 <Button onClick = { this.play }>Play</Button>
+                                <Button onClick = { this.stop }>Stop</Button>
                                 <Button onClick = {this.pause}>Pause</Button>
                                 <Button onClick = {this.playNextSong}>Next</Button>
 
-                                <SidebarCategory categories={this.state.categories} />
-                            </div>
+                    <form>
+                        
+                        <Input className="button" type="radio" value="on"
+                         onChange={(e) => {this.setAutoPlay(e)}}
+                         checked = { this.state.autoplayOn === true }/>
+                        On
+
+                        <Input className="button" type="radio" value="off"
+                         onChange={(e) => {this.setAutoPlay(e)}}
+                         checked = { this.state.autoplayOn === false }/>
+                        Off
+
+                    </form>
+
+                        <SidebarCategory categories={this.state.categories} onSongListClick = {(e) => this.deleteSong(e)} channelID={ this.state.channelID } />
+                    </div>
                         </Grid.Column>
                         </Grid.Row>
                         </Grid>
                     </div>
-
-
                     <div className="ui inverted vertical footer segment">
-                    <div className="ui center aligned container">
-                        <div className="ui vertical inverted small divided list">
-                            <div className="asdsad">
-                                <h2 className="ui inverted header">Developers</h2>
-                                <p>hlee295</p>
-                                <p>jsong78</p>
-                                <p>ykim164</p>
-                                <p>hpark125</p>
+                        <div className="ui center aligned container">
+                            <div className="ui vertical inverted small divided list">
+                                <div className="asdsad">
+                                    <h2 className="ui inverted header">Developers</h2>
+                                    <p>hlee295</p>
+                                    <p>jsong78</p>
+                                    <p>ykim164</p>
+                                    <p>hpark125</p>
+                                </div>
+                            </div>
+                            <div className="ui inverted section divider"></div>
+                            <div className="ui horizontal inverted small divided list">
+                                <p>CS498 RK1 Final Project</p>
+                                <p>University of Illinois at Urbana-Champaign</p>
                             </div>
                         </div>
-                        <div className="ui inverted section divider"></div>
-                        <div className="ui horizontal inverted small divided list">
-                            <p>CS498 RK1 Final Project</p>
-                            <p>University of Illinois at Urbana-Champaign</p>
-                        </div>
                     </div>
-                </div>
                 </div>
             )
         }else{
@@ -296,6 +477,5 @@ class Channel extends Component {
 
     }
 }
-
 
 export default Channel

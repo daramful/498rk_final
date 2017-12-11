@@ -1,7 +1,10 @@
 var request = require('request');
 var querystring = require('querystring');
 var channel = require('../models/channel');
+const mongoose = require('mongoose'); // you must have this
+const ObjectId = mongoose.Types.ObjectId; // gets the function
 
+var Pusher = require('pusher');
 
 module.exports = function(router, passport) {
 
@@ -13,7 +16,15 @@ module.exports = function(router, passport) {
     // });
     var client_id = 'ed36a056ee504173a3889b2e55cbd461';
     var client_secret = '28184e92635b420eb7a74a91a2e9a392';
-    var redirect_uri = 'http://mic-drop498.herokuapp.com/auth/spotify/callback';
+    var redirect_uri = 'http://localhost:8888/auth/spotify/callback';
+
+    var pusher = new Pusher({
+        appId: '443456',
+        key: '64fe71b3db1ab2a99821',
+        secret: '6e00cf0eabd20421bdb1',
+        cluster: 'us2'
+      });
+  
 
     router.get('/auth/spotify',
         passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private'], showDialog: false}),
@@ -49,7 +60,7 @@ module.exports = function(router, passport) {
                         }
                         else {
                             res.status(201).json({
-                                message: "Channel "+req.params.id+"Successfully Created",
+                                message: "Channel "+ req.params.id + "Successfully Created",
                                 data:channeldata
                             })
                         }
@@ -74,23 +85,58 @@ module.exports = function(router, passport) {
                 console.log(chn)
                 arr = chn
             });
-            console.log("routergetchannels");
+                if(err || channeldata === null){
+                    res.status(404).send({
+                        message: 'Channel Not Found',
+                        data: []
+                    })
+                }
+                else {
+                    res.status(200).json({
+                        message: "channel to success",
+                        data: arr
+                    })
+                }
             console.log(arr);
-
-            if(err || channeldata === null){
-                res.status(404).send({
-                    message: 'Channel Not Found',
-                    data: []
-                })
-            }
-            else {
-                res.status(200).json({
-                    message: "channel to success",
-                    data: arr
-                })
-            }
             // res.send(userMap);  
         });
+    });
+
+    router.delete('/channels/playlist/song', isLoggedIn, (req, res) => {  
+
+      const channel_id = req.query.channelId;
+      const song_id    = req.query.songId;
+
+      // the following query deletes a song form a playlist of a certain channel
+      channel.update({_id: ObjectId(channel_id)},{$pull:{playList:{_id:ObjectId(song_id)}}})
+        .exec()
+        .then(result => {
+
+          // for checking if document was found and deleted
+          // mongodb actually returns special object `result`
+          //   which has its own certain fields
+          if (result.deletedCount != 0) {
+            res.status(200).send({
+              success: true,
+              message: `Channel with id ${req.params.id} deleted`
+            })
+          }
+          else {
+            res.status(404).send({
+                success: false,
+              message: `Channel with id ${req.params.id} was not found`
+            })
+          }         
+
+        })
+        .catch(error => {
+            // here we see if we had any problem with server or db itself
+            console.log(error)
+            res.status(500).send({
+            success: false,
+            message: "Something went wrong with DELETE /channels/:id"
+          })
+        })
     });
 
     router.get('/channels/:id',
@@ -128,6 +174,15 @@ module.exports = function(router, passport) {
                         data:channeldata
                     })
                     console.log(channeldata);
+                    pusher.trigger(
+                        'mychannel',
+                        'modified', 
+                            {
+                              name: req.params.id,
+                              data: channeldata
+                            }
+                    );
+
                 }
             })
     });

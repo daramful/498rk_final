@@ -3,52 +3,53 @@
 }
 	
 .menu.item.right {
-    float: right;
+	float: right;
 }
 	
 .ui.container {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-.ui.button {
-    height: 40px;   
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
+.ui.button {
+	height: 40px;
+}
+	
 .mainVideo {
-    text-align:center;
-    width:100%;
+	text-align: center;
+	width: 100%;
 }
 	
 div.description > ul {
-    list-style-type: none;
+	list-style-type: none;
 }
 	/* title animation */
 	 
 #animated_div {
-    text-align: center;
-    display: block;
-    height:70px;
-	    background: #92B901;
-	    color: #ffffff;
-	    position: relative;
-	    font-weight:bold;
-	    font-size:20px;
-	    padding:10px;
-	    animation:animated_div 5s 1;
-	    -moz-animation:animated_div 5s 1;
-	    -webkit-animation:animated_div 5s 1;
-	    -o-animation:animated_div 5s 1;
-	    border-radius:5px;
-	    -webkit-border-radius:5px;
-	  }
+	text-align: center;
+	display: block;
+	height:70px;
+	background: #92B901;
+	color: #ffffff;
+	position: relative;
+	font-weight:bold;
+	font-size:20px;
+	padding:10px;
+	animation:animated_div 5s 1;
+	-moz-animation:animated_div 5s 1;
+	-webkit-animation:animated_div 5s 1;
+	-o-animation:animated_div 5s 1;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+}
 	
 	  h1#animated_div {
-	    margin: 0;
-	    position: absolute;
-	    top: 70%;
-	    transform: translateY(-50%);
-	    left: 0;
-	    right: 0;
+	margin: 0;
+	position: absolute;
+	top: 70%;
+	transform: translateY(-50%);
+	left: 0;
+	right: 0;
 	  }
 	
 	  @keyframes animated_div

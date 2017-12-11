@@ -26,8 +26,7 @@ module.exports = function(passport) {
     passport.use(new SpotifyStrategy({
         clientID: appKey,
         clientSecret: appSecret,
-        //callbackURL: 'http://localhost:8888/auth/spotify/callback'
-        callbackURL: 'http://mic-drop498.herokuapp.com/auth/spotify/callback'
+        callbackURL: 'http://localhost:8888/auth/spotify/callback'
         // usernameField : 'email',
         // passwordField : 'password',
     },
