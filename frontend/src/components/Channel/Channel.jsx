@@ -28,23 +28,20 @@ class Channel extends Component {
             categories: [],
             track: [],
             audioList: [],
-            currSongKey: 0
+            currSongKey: 0,
+            value: "",
+            results: []
 
         };
-
-        //this.playlists = [];
 
         this.play = this.play.bind(this);
         this.pause = this.pause.bind(this);
         this.playNextSong = this.playNextSong.bind(this);
         this.playPrevSong = this.playPrevSong.bind(this);
+        this.addSong=this.addSong.bind(this);
     }
 
       playPrevSong(){
-
-        //this.setState({
-        //  songList: arr
-        //});
 
         var currKey = this.state.currSongKey
         currKey -= 1
@@ -54,15 +51,9 @@ class Channel extends Component {
         })
 
         console.log("current key " + this.state.currSongKey)
-
-        //this.songArr[1].play();
       }
 
       playNextSong(){
-
-        //this.setState({
-        //  songList: arr
-        //});
 
         var currKey = this.state.currSongKey
         currKey += 1
@@ -73,14 +64,12 @@ class Channel extends Component {
 
         console.log("current key " + this.state.currSongKey)
 
-        //this.songArr[1].play();
       }
       
 
       play(){
 
         alert("play song " + this.state.currSongKey)
-        //console.log("playyyyyy")
 
         this.setState({
           play: true,
@@ -91,35 +80,16 @@ class Channel extends Component {
       }
       
       pause(){
-        //alert("pause song " + this.state.audioList)
-        //this.setState({ play: false, pause: true });
-        //this.state.audioList[this.state.currSongKey].currentTime = 0;
         this.setState({
           play: false,
           pause: true
         });
 
         this.state.audioList[this.state.currSongKey].pause();
-        //alert("pause song " + this.state.audioList)
       }
 
     componentWillMount() {
-
-        console.log('Component WILL MOUNT!')
-
-        axios.get('/channels').then( (res) => {
-            //console.log(res.data.data.playList);
-            let playlists = [];
-            res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
-
-            this.setState((prevState) => {
-                return { audioList: playlists, categories: res.data.data.playList }
-            }, () => console.log(this.state.audioList));
-
-        }).catch( (err) => {
-            console.log(err);
-        });
-
+        console.log('component will mount');
     }   
 
     componentDidMount() {
@@ -129,14 +99,27 @@ class Channel extends Component {
                 isLoggedIn: true,
                 userInfo: res.data.user.profile,
                 accessToken: res.data.user.accessToken,
-                refreshToken: res.data.user.refreshToken,
-                channelName: this.props.match.params.id
+                refreshToken: res.data.user.refreshToken
             })
         }).catch( (err) => {
             this.setState({
                 isLoggedIn: false
             })
         });
+
+        axios.get('/channels/'+this.props.match.params.id)
+            .then((res)=>{
+            
+            let playlists = [];
+            res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
+            this.setState({
+                audioList: playlists,
+                categories: res.data.data.playList,
+                channelName: this.props.match.params.id
+            });
+        }).catch((err)=>{
+            console.log(err);
+        });   
 
     }
     
@@ -150,43 +133,25 @@ class Channel extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
-/*
-
-        console.log("did update")
-
-        axios.get('/channels').then( (res) => {
-            //console.log(res.data.data.playList);
-            let playlists = [];
-            res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
-
-            this.setState((prevState) => {
-                return { audioList: playlists, categories: res.data.data.playList }
-            }, () => console.log(this.state.audioList));
-
-        }).catch( (err) => {
-            console.log(err);
-        });
-*/
+        console.log("component did update");
+        console.log(this.state.track);
     }
 
     componentWillUnmount(){
     }
 
-    search(event){
+    search(e){
         this.setState({
-            keyword: event.target.value
-        })
+            keyword: e.target.value
+        });
         const BASE_URL = 'https://api.spotify.com/v1/search?';
-        const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=track&limit=30';
+        const FETCH_URL = BASE_URL + 'q=' + e.target.value + '&type=track&limit=3';
         axios.get(FETCH_URL, 
             { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
             .then((res)=>{
                 this.setState({
-                    //songName: res.data.tracks.items[0].name,
-                    //artists: res.data.tracks.items[0].artists
                     track: res.data.tracks.items
                 });
-                console.log(res);
             }).catch((err)=>{
                 console.log(err);
             });
@@ -209,15 +174,30 @@ class Channel extends Component {
             loggedin: false
         });
     }
+    addSong(){
+
+        axios.get('/channels/'+this.state.channelName)
+            .then((res)=>{
+            console.log(res);
+            var newSong = res.data.data.playList[res.data.data.playList.length-1];
+            var playlists = this.state.audioList;
+            playlists.push(new Audio(newSong.url));
+            this.setState({
+                audioList: playlists,
+                categories: res.data.data.playList
+            });
+            }).catch((err)=>{
+                console.log(err);
+        });
+    }
 
     render() {
 
         const mapToComponents = (data) => {
-        
             if(this.state.keyword == '') return [];
 
             return data.map((eachData, index) => {
-                return (  <SongList track = { eachData } key={ index }/>  );
+                return (  <SongList key={ index } track = { eachData } channelName={this.state.channelName} onMusicClick={this.addSong}/> );
             });
         };
 
@@ -260,15 +240,12 @@ class Channel extends Component {
                         </div>
 
 
-
                         <SidebarCategory categories={this.state.categories} />
 
                         <Button onClick = {this.playPrevSong}>Prev</Button>
                         <Button onClick = { this.play }>Play</Button>
                         <Button onClick = {this.pause}>Pause</Button>
                         <Button onClick = {this.playNextSong}>Next</Button>
-                   
-          
                     </div>
                     <div className="ui inverted vertical footer segment">
                         <div className="ui center aligned container">
@@ -309,5 +286,6 @@ class Channel extends Component {
 
     }
 }
+
 
 export default Channel

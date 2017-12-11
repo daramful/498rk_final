@@ -6,27 +6,27 @@ import axios from 'axios'
 
 class SongList extends Component {  
 
-    constructor() {
-        super();
-
+    constructor(props) {
+        super(props);
+        this.state={
+            channelName: this.props.channelName
+        };
         this.previewMusic = this.previewMusic.bind(this);
         this.clickMusicHandler = this.clickMusicHandler.bind(this);
     }
 
 
     clickMusicHandler() {
-        
-        //console.log(this.props.channel);
 
-        axios.put('/channels/'+'test', {
+        axios.put('/channels/'+ this.props.channelName, {
 
             playList: {
                 songName: this.props.track.name,
                 artist: this.props.track.artists[0].name,
                 url: this.props.track.preview_url
             }
-        })
-            .then((res)=>{
+        }).then((res)=>{
+            this.props.onMusicClick(this.props.track);
             console.log("added song");
         }).catch((err)=>{
             console.log(err);
@@ -42,9 +42,9 @@ class SongList extends Component {
 
     render() {
 
-        let noTrakcs = (Object.keys(this.props.track).length === 0);
+        let noTracks = (Object.keys(this.props.track).length === 0);
 
-        if(noTrakcs) {
+        if(noTracks) {
 
             return (
                     <Card className="RecSongList">

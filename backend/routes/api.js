@@ -74,19 +74,21 @@ module.exports = function(router, passport) {
                 console.log(chn)
                 arr = chn
             });
-                if(err || channeldata === null){
-                    res.status(404).send({
-                        message: 'Channel Not Found',
-                        data: []
-                    })
-                }
-                else {
-                    res.status(200).json({
-                        message: "channel to success",
-                        data: arr
-                    })
-                }
+            console.log("routergetchannels");
             console.log(arr);
+
+            if(err || channeldata === null){
+                res.status(404).send({
+                    message: 'Channel Not Found',
+                    data: []
+                })
+            }
+            else {
+                res.status(200).json({
+                    message: "channel to success",
+                    data: arr
+                })
+            }
             // res.send(userMap);  
         });
     });
