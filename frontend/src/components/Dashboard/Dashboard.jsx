@@ -55,8 +55,8 @@ class Dashboard extends Component {
                 console.log(err);
             });
         console.log(this.state.userInfo);
-
     }
+    
     logOut() {
         axios.get('/logout').then( (res) => {
             console.log("Logged out");
@@ -79,10 +79,12 @@ class Dashboard extends Component {
                                 About
                             </div>
                             <div className="menu item right" />
+                            {/*
                             <div className="profileImage">
                                 <Image className="ui small circular image" src={this.state.userInfo.photos[0]} onClick={(e)=>this.viewProfile(e)}/>
                             </div>
-                            <div className="menu item" onClick={(e)=>this.viewProfile(e)}>{this.state.userInfo.displayName}</div>
+                            <div className="menu item" onClick={(e)=>this.viewProfile(e)}>{this.state.userInfo.id}</div>
+                            */}
                             <Link to="/" onClick={this.logOut}>
                                 <Button className="ui yellow button">
                                     Log Out

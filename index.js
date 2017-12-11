@@ -10,6 +10,10 @@ const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const mongoose = require('mongoose');
+
+var configDB = require('./config/index.json');
+mongoose.connect(configDB.dbUri);
 
 app.use(express.static('./backend/static/'));
 app.use(express.static('./frontend/dist/'));
@@ -52,10 +56,6 @@ app.use(cookieSession({
   keys: ['asdf', 'asdf']
 }));
 
-
-
-
-
 // Initialize Passport
 app.use(passport.initialize()); // Create an instance of Passport
 app.use(passport.session());
@@ -65,6 +65,12 @@ app.use('/', require('./backend/routes/api')(router, passport));
 /* =========================================================================== */
 
 // start the server
+
+app.listen(process.env.PORT || 8888, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
+/*
 app.listen(8888, () => {
   console.log('Server is running on http://localhost:8888');
 });
+*/

@@ -77,11 +77,11 @@ class Home extends Component {
                             About
                         </div>
                         <div className="menu item right" />
-                        <Link to="/login">
-        					<Button className="ui yellow button">
+						<a href="/auth/spotify">
+							<Button className="ui yellow button">
                                 Login
                             </Button>
-                        </Link>
+						</a>
                         <Link to="/signup">
                             <Button className="ui yellow button">
                                 Sign Up

@@ -1,7 +1,7 @@
 var LocalStrategy = require('passport-local').Strategy;
+var SpotifyStrategy = require('passport-spotify').Strategy;
 var User = require('../models/user');
-
-const SpotifyStrategy = require('passport-spotify').Strategy;
+var axios = require('axios');
 
 // var consolidate = require('consolidate');
 
@@ -17,9 +17,7 @@ module.exports = function(passport) {
     });
 
     passport.deserializeUser(function(obj, done) {
-        // User.findById(id, function(err, user) {
-            done(null, obj);
-        // });
+        done(null, obj);
     });
 
     // Registration Strategy
@@ -27,39 +25,47 @@ module.exports = function(passport) {
         clientID: appKey,
         clientSecret: appSecret,
         callbackURL: 'http://localhost:8888/auth/spotify/callback'
-        // usernameField : 'email',
-        // passwordField : 'password',
     },
         function(accessToken, refreshToken, profile, done){
             process.nextTick(function(){
+                var userInfo = axios.get('https://api.spotify.com/v1/me', { headers: { 'Authorization': 'Bearer' + accessToken } });
+
+                User.findOne({'id': userInfo.id}, function(err,user) {
+                    if(user) {
+                        return done(null, user);
+                    }
+                    else {
+                        var newUser = new User();
+                        newUser.email = userInfo.email;
+                        newUser.displayName = userInfo.displayName;
+                        
+        
+                        //return done(null,newUser);
+        
+                        newUser.save(function(err) {
+                            if(err) {
+                                return done(err);
+                            }
+                            return done(null, newUser);
+                        });
+                    }
+                });
+                /*
                 var newUser = new User();
-                newUser.profile = profile;
+                newUser.id = userInfo.id;
+                newUser.email = userInfo.email;
                 newUser.accessToken = accessToken;
                 newUser.refreshToken = refreshToken;
-                return done(null, newUser);
+
+                //return done(null,newUser);
+
+                newUser.save(function(err) {
+                    if(err) {
+                        return done(err);
+                    }
+                    return done(null, newUser);
+                });
+                */
             });
     }));
-
-    // Login Strategy
-    // passport.use(new SpotifyStrategy({
-    //     clientID: appKey,
-    //     clientSecret: appSecret,
-    //     callbackURL: 'http://localhost:8888/callback'
-        
-    // },
-    // function(accessToken, refreshToken, profile, done){
-    //     process.nextTick(function(){
-    //         return done(null, profile);
-    //     });
-    // // function(email, password, done) {
-    // //     User.findOne({'email': email}, function(err, user) {
-    // //         if ( err ) {
-    // //             return done(err);
-    // //         } else if ( !user || !user.validPassword(password) ) {
-    // //             return done(null, false);
-    // //         }
-
-    // //         return done(null, user);
-    // //     });
-    // }));
 };

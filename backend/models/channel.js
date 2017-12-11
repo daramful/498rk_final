@@ -3,7 +3,9 @@ var mongoose = require('mongoose');
 var ChannelSchema = new mongoose.Schema({
 	name: {type:String,required:true},
 	playList: [{
-		type: String
+		songName: { type : String },
+		artist: { type : String },
+		url: { type : String }
 	}]
 })
 

@@ -2,15 +2,8 @@ var request = require('request');
 var querystring = require('querystring');
 var channel = require('../models/channel');
 
-
 module.exports = function(router, passport) {
 
-    // router.post('/register',
-    //     passport.authenticate('spotify-signup'),
-    //     function(req, res) {
-    //         res.status(200).json({ user: req.user.email
-    //     });
-    // });
     var client_id = 'ed36a056ee504173a3889b2e55cbd461';
     var client_secret = '28184e92635b420eb7a74a91a2e9a392';
     var redirect_uri = 'http://localhost:8888/auth/spotify/callback';
@@ -32,6 +25,7 @@ module.exports = function(router, passport) {
             console.log(req.isAuthenticated());
             res.status(200).json({ user: req.user, message: "Welcome!" });
     });
+
     router.post('/channels/:id',
         isLoggedIn,
         function(req, res) {
@@ -61,8 +55,36 @@ module.exports = function(router, passport) {
                         data:[]
                     })
                 }
-            })
-            
+            })  
+    });
+
+    router.get('/channels', isLoggedIn, function(req, res) {
+        channel.find({}, function(err, channeldata) {
+            var arr = []
+            var channelMap = {};
+            console.log('channelMap:');
+            console.log(channelMap);
+            channeldata.forEach((chn)=> {
+                console.log(chn)
+                arr = chn
+            });
+            console.log("routergetchannels");
+            console.log(arr);
+
+            if(err || channeldata === null){
+                res.status(404).send({
+                    message: 'Channel Not Found',
+                    data: []
+                })
+            }
+            else {
+                res.status(200).json({
+                    message: "channel to success",
+                    data: arr
+                })
+            }
+            // res.send(userMap);  
+        });
     });
 
     router.get('/channels/:id',
