@@ -4,7 +4,7 @@
 1. [Explanation of Our App](#explanation)
 2. [Environment Setup Guide](#environment-setup-guide)
 
-## explanation
+## Explanation
 
 
 ## Environment Setup Guide
