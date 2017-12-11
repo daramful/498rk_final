@@ -1,15 +1,15 @@
-const path = require('path');
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const passport = require('passport')
-const config = require('./config');
-const User = require('./')
-const router = express.Router();
-const cookieSession = require('cookie-session');
-const cookieParser = require('cookie-parser');
-const methodOverride = require('method-override');
-const session = require('express-session');
+var path = require('path'),
+	express = require('express'),
+	bodyParser = require('body-parser'),
+	app = express(),
+	passport = require('passport'),
+	config = require('./config'),
+	User = require('./'),
+	router = express.Router(),
+	cookieSession = require('cookie-session'),
+	cookieParser = require('cookie-parser'),
+	methodOverride = require('method-override'),
+	session = require('express-session');
 
 app.use(express.static('./backend/static/'));
 app.use(express.static('./frontend/dist/'));
@@ -53,15 +53,12 @@ app.use(cookieSession({
 }));
 
 
-
-
-
 // Initialize Passport
 app.use(passport.initialize()); // Create an instance of Passport
 app.use(passport.session());
 
 // Get our routes
-app.use('/', require('./backend/routes/api')(router, passport));
+app.use('/', require('./backend/routes/server')(router, passport));
 /* =========================================================================== */
 
 // start the server

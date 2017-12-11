@@ -1,22 +1,43 @@
 import React, { Component } from 'react'
 import { Button, Input, Icon, Dropdown, Card, Grid, Segment } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
-import $ from 'jquery'
-
+import axios from 'axios'
 export class SidebarCategory extends React.Component {
 
     constructor(props) {
-        super(props);
-        this.state = {
-            play: false,
-            pause: true,
-            songList: []
-        };
+    super(props);
+    this.state = {
+
+      play: false,
+      pause: true,
+      songList: []
+      
+    };
+
+    this.clickSongListHandler = this.clickSongListHandler.bind(this);
+
+  }
+
+    clickSongListHandler(e) {
+
+
+      console.log(e)
+      this.props.onSongListClick(e);
+
+        axios.delete('/channels/playlist/song?channelId=' + this.props.channelID + '&songId=' + e).then((res)=>{
+
+            this.props.onSongListClick();
+            console.log("deleted song");
+        }).catch((err)=>{
+            console.log(err);
+        });   
+
+
     }
 
 
     render() {
-        return (
+              return (
             <div className="ui icon message">
             <div className="item">
                 <div className="content" >
@@ -25,6 +46,9 @@ export class SidebarCategory extends React.Component {
                     <div key={key} className="ui divider" style={{padding: 1 + 'em'} }>
                         <i className="large spotify middle aligned icon"></i>
                         <span>{category.songName}</span>- <span>{category.artist}</span>
+                        <Button
+                                onClick = { (e) => this.clickSongListHandler(category._id) }
+                             >X</Button>
                     </div>                            
                     ))}
                 </a>
@@ -33,6 +57,9 @@ export class SidebarCategory extends React.Component {
             </div>
             </div>    
         );
+
+
+
     }
 }
 

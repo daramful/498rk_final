@@ -5,7 +5,8 @@ import axios from 'axios'
 import SongList from './SongList.jsx'
 import SidebarCategory from './SidebarCategory.jsx';
 import Music from './Music.jsx';
-// import styles from './Channel.scss'
+import Pusher from 'pusher-js';
+
 
 class Channel extends Component {
 
@@ -30,7 +31,8 @@ class Channel extends Component {
             audioList: [],
             currSongKey: 0,
             value: "",
-            results: []
+            results: [],
+            channelID: ""
 
         };
 
@@ -39,6 +41,7 @@ class Channel extends Component {
         this.playNextSong = this.playNextSong.bind(this);
         this.playPrevSong = this.playPrevSong.bind(this);
         this.addSong=this.addSong.bind(this);
+        this.deleteSong = this.deleteSong.bind(this);
     }
 
       playPrevSong(){
@@ -88,12 +91,17 @@ class Channel extends Component {
         this.state.audioList[this.state.currSongKey].pause();
       }
 
-    componentWillMount() {
+    componentWillMount(){
+        this.pusher = new Pusher('64fe71b3db1ab2a99821',{cluster: "us2", encrypted: true});
+        this.channel = this.pusher.subscribe('mychannel');
         console.log('component will mount');
-    }   
+    }
 
-    componentDidMount() {
+   componentDidMount() {
 
+        this.channel.bind('modified', this.updateEvents);
+        this.channel.bind('modified', this.addSong);
+        this.channel.bind('modified', this.deleteSong);
         axios.get('/profile').then( (res) => {
             this.setState({
                 isLoggedIn: true,
@@ -112,7 +120,9 @@ class Channel extends Component {
             
             let playlists = [];
             res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
+            //console.log("channel id " + res.data.data._id)
             this.setState({
+                channelID: res.data.data._id,
                 audioList: playlists,
                 categories: res.data.data.playList,
                 channelName: this.props.match.params.id
@@ -129,15 +139,21 @@ class Channel extends Component {
     
     shouldComponentUpdate(nextProps, nextState){
         console.log("shouldcomponentupdate");
-        return (this.state != nextState);
+        return true;
     }
 
     componentDidUpdate(prevProps, prevState){
         console.log("component did update");
         console.log(this.state.track);
+        console.log(this.props);
     }
 
     componentWillUnmount(){
+        this.channel.unbind();
+        this.pusher.unsubscribe(this.channel);
+    }
+    updateEvents(data){
+        // var newArray
     }
 
     search(e){
@@ -191,13 +207,61 @@ class Channel extends Component {
         });
     }
 
+
+
+        deleteSong(e) {
+
+            //alert("Song deleted " + e);
+
+            var i = 'notchanged';
+
+            axios.get('/channels/'+this.state.channelName)
+                .then((res)=>{
+                console.log(res);
+                var newSongs = res.data.data.playList;
+                console.log("current songs on db")
+                console.log(newSongs)
+                console.log("original long list")
+                console.log(this.state.categories)
+
+                for (i = 0; i < this.state.categories.length; i++) { 
+                    //console.log( i + "  " + this.state.categories[i]._id + "  "  + newSongs[i]._id)
+                    if(newSongs[i] === undefined) { 
+                        break;
+
+                    } else {
+        
+                        if(this.state.categories[i]._id !== newSongs[i]._id) { 
+
+                            break;
+                        }
+                    }
+                }
+
+                console.log("deleted index " + i)
+
+                var playlists = this.state.audioList;
+                playlists.splice(i, 1);
+
+                this.setState({
+                    audioList: playlists,
+                    categories: res.data.data.playList
+                });
+                console.log(this.state.audioList)
+                }).catch((err)=>{
+                    console.log(err);
+            });
+
+
+        }
+
     render() {
 
         const mapToComponents = (data) => {
             if(this.state.keyword == '') return [];
 
             return data.map((eachData, index) => {
-                return (  <SongList key={ index } track = { eachData } channelName={this.state.channelName} onMusicClick={this.addSong}/> );
+                return (  <SongList key={ index } track = { eachData } channelName={this.state.channelName} onMusicClick={this.addSong} /> );
             });
         };
 
@@ -249,7 +313,7 @@ class Channel extends Component {
                                 <Button onClick = {this.pause}>Pause</Button>
                                 <Button onClick = {this.playNextSong}>Next</Button>
 
-                                <SidebarCategory categories={this.state.categories} />
+                                <SidebarCategory categories={this.state.categories} onSongListClick = {(e) => this.deleteSong(e)} channelID={ this.state.channelID } />
                             </div>
                         </Grid.Column>
                         </Grid.Row>
