@@ -1,16 +1,21 @@
 var request = require('request');
 var querystring = require('querystring');
 var channel = require('../models/channel');
-
+var passport = require('passport');
+var passportLocal = require('passport-local');
+var passportSpotify = require('passport-spotify');
 
 module.exports = function(router, passport) {
+    router.post('/login', passport.authenticate('local-login', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/login',
+    }));
 
-    // router.post('/register',
-    //     passport.authenticate('spotify-signup'),
-    //     function(req, res) {
-    //         res.status(200).json({ user: req.user.email
-    //     });
-    // });
+    router.post('/signup', passport.authenticate('local-signup', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/signup',
+    }));
+
     var client_id = 'ed36a056ee504173a3889b2e55cbd461';
     var client_secret = '28184e92635b420eb7a74a91a2e9a392';
     var redirect_uri = 'http://localhost:8888/auth/spotify/callback';

@@ -1,38 +1,53 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { Button, Input, Card } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router'
 import axios from 'axios'
 
-import Auth from '../modules/Auth';
-
 import styles from './styles.scss'
 
-class Login extends Component {
+class Signup extends Component {
 
     constructor(props, context) {
         super(props, context);
 
-        const storedMessage = localStorage.getItem('successMessage');
-        let successMessage = '';
-
-        if(storedMessage) {
-            successMessage = storedMessage;
-            localStorage.removeItem('successMessage');
-        }
-
         this.state = {
-            successMessage,
             user: {
                 password: '',
                 email: ''
             },
-        }
+        };
 
         this.processForm = this.processForm.bind(this);
         this.changeUser = this.changeUser.bind(this);
     }
+    /*
+
+    componentDidMount() {
+        axios.get('/profile').then( (res) => {
+            this.setState({
+                email: res.data.user.email,
+                password: res.data.user.password,
+                isLoggedIn: true,
+            })
+        }).catch( (err) => {
+            this.setState({
+                isLoggedIn: false,
+                userInfo: [],
+                email: "",
+                password: ""
+            })
+        });
+    }
+
+    onSubmit(event) {
+        event.preventDefault();
+
+        const email = this.state.user.email;
+        const password = this.state.user.password;
+    }
+    */
 
     processForm(event) {
         event.preventDefault();
@@ -42,17 +57,13 @@ class Login extends Component {
         const formData = `email=${email}&password=${password}`;
 
         const xhr = new XMLHttpRequest();
-        xhr.open('post', '/auth/login');
+        xhr.open('post', '/auth/signup');
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.responseType = 'json';
+        xhr.responseType='json';
         xhr.addEventListener('load', () => {
             if(xhr.status === 200) {
                 message: 'Successfully signed up!';
-                Auth.authenticateUser(xhr.response.token);
-                this.context.router.history.replace('/dashboard');
-                this.setState({
-                    isLoggedIn: true
-                })
+                this.context.router.history.replace('/login');
             }
             else {
                 this.setState({
@@ -75,19 +86,19 @@ class Login extends Component {
 
     render() {
         return(
-            <form className="Login" action="post" onSubmit={this.processForm}>
-                <Card className="Login__content">
+            <form className="Signup" action="post" onSubmit={this.processForm}>
+                <Card className="Signup__content">
                     <div>
-                        <h1>Login</h1>
-                        <Input label="Email" onChange={this.changeuser} />
+                        <h1>Signup</h1>
+                        <Input label="Email" onChange={this.changeUser} />
                         <br/><br/>
                         <Input label="Password" onChange={this.changeUser} />
                         <br/><br/>
 
                         <p>{this.state.message}</p>
-                        <Button type="submit" label="Log In" primary/>
-                        <Button className="ui inverted small green button"><a href="/auth/spotify">Login with Spotify</a></Button>
-                        <h4>No account yet? Click <Link to="/signup">here</Link> to Register!</h4>
+                        <Button type="submit" label="Sign Up" primary/>
+                        <Button className="ui inverted small green button"><a href="/auth/spotify">Signup with Spotify</a></Button>
+                        <h4>Already have an account yet? Click <Link to="/signup">here</Link> to Register!</h4>
 
                         <Link to="/dashboard"><p>Go to Dashboard</p></Link>
                     </div>
@@ -98,16 +109,15 @@ class Login extends Component {
 }
 
 /*
-Login.propTypes = {
+Signup.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
-    successMessage: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired
 }
 */
 
-Login.contextTypes = {
+Signup.contextTypes = {
     router: PropTypes.object.isRequired
 };
 
-export default Login
+export default Signup;

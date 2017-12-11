@@ -38,7 +38,6 @@ class Dashboard extends Component {
                 refreshToken: ""
             })
         });
-
     }
 
     shouldComponentUpdate(nextProps, nextState){

@@ -2,7 +2,9 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const passport = require('passport')
+const passport = require('passport');
+const passportLocal = require('passport-local');
+const passportSpotify = require('passport-spotify');
 const config = require('./config');
 const User = require('./')
 const router = express.Router();
@@ -10,12 +12,14 @@ const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const mongoose = require('mongoose');
+const flash = require('connect-flash');
 
 app.use(express.static('./backend/static/'));
 app.use(express.static('./frontend/dist/'));
 
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: false
 }));
 
 app.use(bodyParser.json());
@@ -27,21 +31,16 @@ app.route('/').get(function(req, res) {
 app.route('/login').get(function(req, res) {
   return res.sendFile(path.join(__dirname, './backend/static/index.html'));
 });
-// app.route('/register').get(function(req, res) {
-//   return res.sendFile(path.join(__dirname, './backend/static/index.html'));
-// });
+app.route('/signup').get(function(req, res) {
+  return res.sendFile(path.join(__dirname, './backend/static/index.html'));
+});
 app.route('/dashboard').get(function(req,res) {
   return res.sendFile(path.join(__dirname, './backend/static/index.html'));
 })
-app.route('/startParty').get(function(req,res) {
-  return res.sendFile(path.join(__dirname, './backend/static/index.html'));
-})
-app.route('/joinParty').get(function(req,res) {
-  return res.sendFile(path.join(__dirname, './backend/static/index.html'));
-})
-/* New things ================================================================ */
 
-require('./backend/models').connect(config.dbUri);
+var configDB = require('./config/index.json');
+mongoose.connect(configDB.dbUri);
+
 require('./backend/auth/passport')(passport);
 
 // Initialize cookie sessions
@@ -52,16 +51,15 @@ app.use(cookieSession({
   keys: ['asdf', 'asdf']
 }));
 
-
-
-
-
 // Initialize Passport
 app.use(passport.initialize()); // Create an instance of Passport
 app.use(passport.session());
+app.use(flash());
 
 // Get our routes
 app.use('/', require('./backend/routes/api')(router, passport));
+const authRoutes = require('./backend/routes/api')(router, passport);
+app.use('/auth', authRoutes);
 /* =========================================================================== */
 
 // start the server

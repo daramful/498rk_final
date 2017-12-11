@@ -2,7 +2,9 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
 var userSchema = mongoose.Schema({
-    profile		: {},
+    email: String,
+    password: String,
+    profile: {},
     accessToken	: String,
     refreshToken : String
 });
@@ -16,3 +18,5 @@ userSchema.methods.validPassword = function(password) {
 };
 
 module.exports = mongoose.model('User', userSchema);
+
+//something keeps breaking --
