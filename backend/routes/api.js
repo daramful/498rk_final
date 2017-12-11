@@ -13,7 +13,7 @@ module.exports = function(router, passport) {
     // });
     var client_id = 'ed36a056ee504173a3889b2e55cbd461';
     var client_secret = '28184e92635b420eb7a74a91a2e9a392';
-    var redirect_uri = 'http://localhost:8888/auth/spotify/callback';
+    var redirect_uri = 'http://mic-drop498.herokuapp.com/auth/spotify/callback';
 
     router.get('/auth/spotify',
         passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private'], showDialog: false}),
