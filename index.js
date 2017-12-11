@@ -10,7 +10,10 @@ const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const Mongoose = require('mongoose');
+Mongoose.Promise = global.Promise;
 
+Mongoose.connect(config.dbUri, { useMongoClient: true } );
 app.use(express.static('./backend/static/'));
 app.use(express.static('./frontend/dist/'));
 
