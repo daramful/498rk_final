@@ -65,6 +65,12 @@ app.use('/', require('./backend/routes/api')(router, passport));
 /* =========================================================================== */
 
 // start the server
+
+app.listen(process.env.PORT || 8888, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
+/*
 app.listen(8888, () => {
   console.log('Server is running on http://localhost:8888');
 });
+*/
