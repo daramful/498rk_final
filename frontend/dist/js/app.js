@@ -37169,27 +37169,37 @@ var SidebarCategory = exports.SidebarCategory = function (_React$Component) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                { className: 'row' },
+                { className: 'ui icon message' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'col-sm-10' },
-                    this.props.categories.map(function (category, key) {
-                        return _react2.default.createElement(
-                            'div',
-                            { key: key },
-                            _react2.default.createElement(
-                                'span',
-                                null,
-                                category.songName
-                            ),
-                            '- ',
-                            _react2.default.createElement(
-                                'span',
-                                null,
-                                category.artist
-                            )
-                        );
-                    })
+                    { className: 'item' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'content' },
+                        _react2.default.createElement(
+                            'a',
+                            { className: 'header' },
+                            this.props.categories.map(function (category, key) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    { key: key, className: 'ui divider', style: { padding: 1 + 'em' } },
+                                    _react2.default.createElement('i', { className: 'large spotify middle aligned icon' }),
+                                    _react2.default.createElement(
+                                        'span',
+                                        null,
+                                        category.songName
+                                    ),
+                                    '- ',
+                                    _react2.default.createElement(
+                                        'span',
+                                        null,
+                                        category.artist
+                                    )
+                                );
+                            })
+                        ),
+                        _react2.default.createElement('div', { className: 'ui divider' })
+                    )
                 )
             );
         }
@@ -37275,15 +37285,12 @@ var SongList = function (_Component) {
     }, {
         key: 'previewMusic',
         value: function previewMusic(event) {
-
             console.log(event.target.value);
         }
     }, {
         key: 'render',
         value: function render() {
-
             var noTracks = Object.keys(this.props.track).length === 0;
-
             if (noTracks) {
 
                 return _react2.default.createElement(

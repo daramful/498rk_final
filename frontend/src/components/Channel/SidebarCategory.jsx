@@ -32,18 +32,21 @@ export class SidebarCategory extends React.Component {
 
     render() {
         return (
-
-                <div className="row">
-                      <div className="col-sm-10">
-                          {this.props.categories.map((category, key) =>(
-                            <div key={key}><span>{category.songName}</span>
-                             - <span>{category.artist}</span></div>
-                          ))}
-                      </div>
+            <div className="ui icon message">
+            <div className="item">
+                <div className="content" >
+                <a className="header">
+                {this.props.categories.map((category, key) =>(
+                    <div key={key} className="ui divider" style={{padding: 1 + 'em'} }>
+                        <i className="large spotify middle aligned icon"></i>
+                        <span>{category.songName}</span>- <span>{category.artist}</span>
+                    </div>                            
+                    ))}
+                </a>
+                <div className="ui divider"></div>
                 </div>
-       
-
-            
+            </div>
+            </div>      
         );
     }
 }

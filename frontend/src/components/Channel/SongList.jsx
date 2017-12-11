@@ -35,15 +35,11 @@ class SongList extends Component {
     }
 
     previewMusic(event) {
-
         console.log(event.target.value);
-
     }
 
     render() {
-
         let noTracks = (Object.keys(this.props.track).length === 0);
-
         if(noTracks) {
 
             return (
