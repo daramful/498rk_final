@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Input, Icon,Dropdown,Card,Image,Search} from 'semantic-ui-react'
+import { Button, Input, Icon, Dropdown, Card, Image, Search, Segment, Grid} from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import SongList from './SongList.jsx'
@@ -227,44 +227,54 @@ class Channel extends Component {
                             </Link>
                        </div>
                    </div>
-                    <div className="ui main text container">
-                        <h1 className="ui header">
-                            Welcome to Channel "<span className="ui header red">{this.state.channelName}</span>"
-                        </h1> 
+                        <div className="ui main text" style={{marginLeft: 10+'%', marginRight: 10+'%', marginBottom: 5+'%'}}>
+                            <h1 className="ui header container">
+                                Welcome to Channel "<span className="ui header red">{this.state.channelName}</span>"
+                            </h1> 
+                        <Grid celled='internally'>
+                        <Grid.Row>
 
-                        <div>
-                            <Input type="text" placeholder="search for a song to add to your playlist" ref="query" onChange={(e) => {this.search(e)}}/>
-                             <div className="recommendedLists">
-                                { mapToComponents(this.state.track) }
-                            </div>  
-                        </div>
+                        <Grid.Column width={4}> 
+                            <div>
+                                <Input type="text" placeholder="search for a song to add to your playlist" ref="query" onChange={(e) => {this.search(e)}}/>
+                                <div className="recommendedLists">
+                                    { mapToComponents(this.state.track) }
+                                </div>  
+                            </div>
+                        </Grid.Column>
+                        <Grid.Column width={12}> 
+                            <div>
+                                <Button onClick = {this.playPrevSong}>Prev</Button>
+                                <Button onClick = { this.play }>Play</Button>
+                                <Button onClick = {this.pause}>Pause</Button>
+                                <Button onClick = {this.playNextSong}>Next</Button>
 
-
-                        <SidebarCategory categories={this.state.categories} />
-
-                        <Button onClick = {this.playPrevSong}>Prev</Button>
-                        <Button onClick = { this.play }>Play</Button>
-                        <Button onClick = {this.pause}>Pause</Button>
-                        <Button onClick = {this.playNextSong}>Next</Button>
+                                <SidebarCategory categories={this.state.categories} />
+                            </div>
+                        </Grid.Column>
+                        </Grid.Row>
+                        </Grid>
                     </div>
+
+
                     <div className="ui inverted vertical footer segment">
-                        <div className="ui center aligned container">
-                            <div className="ui vertical inverted small divided list">
-                                <div className="asdsad">
-                                    <h2 className="ui inverted header">Developers</h2>
-                                    <p>hlee295</p>
-                                    <p>jsong78</p>
-                                    <p>ykim164</p>
-                                    <p>hpark125</p>
-                                </div>
-                            </div>
-                            <div className="ui inverted section divider"></div>
-                            <div className="ui horizontal inverted small divided list">
-                                <p>CS498 RK1 Final Project</p>
-                                <p>University of Illinois at Urbana-Champaign</p>
+                    <div className="ui center aligned container">
+                        <div className="ui vertical inverted small divided list">
+                            <div className="asdsad">
+                                <h2 className="ui inverted header">Developers</h2>
+                                <p>hlee295</p>
+                                <p>jsong78</p>
+                                <p>ykim164</p>
+                                <p>hpark125</p>
                             </div>
                         </div>
+                        <div className="ui inverted section divider"></div>
+                        <div className="ui horizontal inverted small divided list">
+                            <p>CS498 RK1 Final Project</p>
+                            <p>University of Illinois at Urbana-Champaign</p>
+                        </div>
                     </div>
+                </div>
                 </div>
             )
         }else{

@@ -34172,10 +34172,10 @@ var Channel = function (_Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'ui main text container' },
+                        { className: 'ui main text', style: { marginLeft: 10 + '%', marginRight: 10 + '%', marginBottom: 5 + '%' } },
                         _react2.default.createElement(
                             'h1',
-                            { className: 'ui header' },
+                            { className: 'ui header container' },
                             'Welcome to Channel "',
                             _react2.default.createElement(
                                 'span',
@@ -34185,37 +34185,57 @@ var Channel = function (_Component) {
                             '"'
                         ),
                         _react2.default.createElement(
-                            'div',
-                            null,
-                            _react2.default.createElement(_semanticUiReact.Input, { type: 'text', placeholder: 'search for a song to add to your playlist', ref: 'query', onChange: function onChange(e) {
-                                    _this5.search(e);
-                                } }),
+                            _semanticUiReact.Grid,
+                            { celled: 'internally' },
                             _react2.default.createElement(
-                                'div',
-                                { className: 'recommendedLists' },
-                                mapToComponents(this.state.track)
+                                _semanticUiReact.Grid.Row,
+                                null,
+                                _react2.default.createElement(
+                                    _semanticUiReact.Grid.Column,
+                                    { width: 4 },
+                                    _react2.default.createElement(
+                                        'div',
+                                        null,
+                                        _react2.default.createElement(_semanticUiReact.Input, { type: 'text', placeholder: 'search for a song to add to your playlist', ref: 'query', onChange: function onChange(e) {
+                                                _this5.search(e);
+                                            } }),
+                                        _react2.default.createElement(
+                                            'div',
+                                            { className: 'recommendedLists' },
+                                            mapToComponents(this.state.track)
+                                        )
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    _semanticUiReact.Grid.Column,
+                                    { width: 12 },
+                                    _react2.default.createElement(
+                                        'div',
+                                        null,
+                                        _react2.default.createElement(
+                                            _semanticUiReact.Button,
+                                            { onClick: this.playPrevSong },
+                                            'Prev'
+                                        ),
+                                        _react2.default.createElement(
+                                            _semanticUiReact.Button,
+                                            { onClick: this.play },
+                                            'Play'
+                                        ),
+                                        _react2.default.createElement(
+                                            _semanticUiReact.Button,
+                                            { onClick: this.pause },
+                                            'Pause'
+                                        ),
+                                        _react2.default.createElement(
+                                            _semanticUiReact.Button,
+                                            { onClick: this.playNextSong },
+                                            'Next'
+                                        ),
+                                        _react2.default.createElement(_SidebarCategory2.default, { categories: this.state.categories })
+                                    )
+                                )
                             )
-                        ),
-                        _react2.default.createElement(_SidebarCategory2.default, { categories: this.state.categories }),
-                        _react2.default.createElement(
-                            _semanticUiReact.Button,
-                            { onClick: this.playPrevSong },
-                            'Prev'
-                        ),
-                        _react2.default.createElement(
-                            _semanticUiReact.Button,
-                            { onClick: this.play },
-                            'Play'
-                        ),
-                        _react2.default.createElement(
-                            _semanticUiReact.Button,
-                            { onClick: this.pause },
-                            'Pause'
-                        ),
-                        _react2.default.createElement(
-                            _semanticUiReact.Button,
-                            { onClick: this.playNextSong },
-                            'Next'
                         )
                     ),
                     _react2.default.createElement(
@@ -37142,27 +37162,12 @@ var SidebarCategory = exports.SidebarCategory = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (SidebarCategory.__proto__ || Object.getPrototypeOf(SidebarCategory)).call(this, props));
 
         _this.state = {
-
             play: false,
             pause: true,
             songList: []
-
         };
-
         return _this;
     }
-    /*
-        componentDidUpdate(prevProps, prevState){
-            //console.log(this.state.songName);
-            //console.log(this.state.artists[0]);
-    
-    
-            console.log("music did update")
-            
-            this.songArr = this.props.categories.url;
-            console.log(songArr);
-        }
-      */
 
     _createClass(SidebarCategory, [{
         key: 'render',
