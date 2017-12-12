@@ -1,5 +1,7 @@
 # FINAL PROJECT MIC DROP by TEAM NAME
 
+![micdrop](https://user-images.githubusercontent.com/20486323/33866659-94c0cfc8-debd-11e7-91e8-9bca40560d39.png)
+
 ## Table of Contents
 1. [Explanation of Our App](#explanation)
 2. [Environment Setup Guide](#environment-setup-guide)
@@ -23,7 +25,7 @@ own song medley player.
 - npm run dev
 - Open 'http://localhost:8888/' to view your page.
 
-## Developers
+## Team Members
 
 - Hyung Eun Lee (hlee295@illinois.edu)
 - Jae Min Song (jsong78@illinois.edu)
