@@ -47,8 +47,8 @@ export class SidebarCategory extends React.Component {
                       {this.props.categories.map((category, key) =>(
                             <div key={key} style={{padding: 1 + 'em'} }>
                       <Card.Header>
-                          <Button id="xx" onClick = {  (e) => this.sendIndex(key) }>></Button>  
-                          <Button id="xx" onClick = { (e) => this.clickSongListHandler(category._id)}>X</Button>                        
+                          <Button id="xx" onClick = {  (e) => this.sendIndex(key) }><i className="fa fa-play" aria-hidden="true"></i></Button>  
+                          <Button id="xx" onClick = { (e) => this.clickSongListHandler(category._id)}><i className="fa fa-window-close-o" aria-hidden="true"></i></Button>                        
                       </Card.Header>
                         <Card.Description>
                         <span>{category.songName}</span> - By <span>{category.artist}</span>
