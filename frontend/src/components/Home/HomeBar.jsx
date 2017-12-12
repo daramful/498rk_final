@@ -130,7 +130,7 @@ class HomeBar extends Component {
                                     </Button>   
                                 </Link>
                                 <Link to="/contact">
-                                    <Button className="ui black button">Contact</Button>   
+                                    <Button className="ui inverted white button">Contact</Button>   
                                 </Link>
                             </div>
                         </div>)
@@ -162,14 +162,18 @@ class HomeBar extends Component {
                                 </Button>
                             </Link>
                             <div className="menu item right" />
-                                <Link to="/login">
-                                <Button className="ui yellow button">Login</Button>
-                                </Link>
+                                <a href="/auth/spotify" className="spotifyButtonText">
+                                    <Button className="ui inverted green button">
+                                        Log in with Spotify
+                                    </Button>
+                                </a>
+                                {/*
                                 <Link to="/signup">
                                 <Button className="ui yellow button">Sign Up</Button>
                                 </Link>
+                                */}
                                 <Link to="/contact">
-                                    <Button className="ui black button">Contact</Button>   
+                                    <Button className="ui inverted white button">Contact</Button>   
                                 </Link>
                         </div>
                     </div>)

@@ -5,12 +5,12 @@ import 'semantic-ui-css/semantic.min.css';
 
 import Home from './components/Home/Home.jsx';
 import Login from './components/Login/Login.jsx';
-// import Signup from './components/Register/Register.jsx';
 import StartParty from './components/StartParty/StartParty.jsx';
 import JoinParty from './components/JoinParty/JoinParty.jsx';
 import Channel from './components/Channel/Channel.jsx';
 import HomeBar from './components/Home/HomeBar.jsx';
 import Authenticate from './components/Authenticate/Authenticate.jsx';
+import Contact from './components/Contact/Contact.jsx';
 import styles from './styles/main.scss';
 
 
@@ -26,6 +26,7 @@ render(
         			<Route exact path="/joinParty" component={JoinParty}/>
         			<Route exact path="/channels/:id" component={Channel}/>
                     <Route exact path="/authenticate" component={Authenticate}/>
+                    <Route exact path="/contact" component={Contact}/>
                 </Switch>
         </div>
     </Router>,

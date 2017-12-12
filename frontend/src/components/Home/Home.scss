@@ -46,6 +46,7 @@
 .mainVideo {
 	text-align: center;
 	width: 100%;
+	margin-top: 5vh;
 }
 	
 div.description > ul {
@@ -119,6 +120,18 @@ div.description > ul {
 	  70%  {transform: rotate(0deg);left:500px;background:#1ec7e6;}
 	  100% {transform: rotate(-360deg);left:0px;}
 	  }
-	  
-	
-	
+
+.spotifyButtonText {
+	text-decoration: none;
+	color: green;
+}
+
+.spotifyButtonText:visited {
+	text-decoration: none;
+	color: #ffffff;
+}
+
+.spotifyButtonText:hover {
+	text-decoration: none;
+	color: #ffffff;
+}
