@@ -34,7 +34,7 @@ module.exports = function(router, passport) {
     router.get('/auth/spotify/callback',
         passport.authenticate('spotify', { failureRedirect: '/login' }),
         function(req,res){
-                res.redirect('/dashboard');
+                res.redirect('/');
     });
     
     router.get('/profile',
@@ -179,5 +179,8 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    return res.status(401).json({ message: "unable to auth" });
+    else{
+        res.status(401).json({ message: "unable to auth" });
+        res.redirect('/authenticate');
+    }
 }

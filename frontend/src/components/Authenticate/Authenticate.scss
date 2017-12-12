@@ -1,0 +1,21 @@
+
+.unauthorized{
+	top: 50%;
+    position: absolute;
+    left: 50%;
+    width: 60%;
+    height: 20%;
+}
+
+.olive.card{
+	text-align: center;
+	width: 100% !important;
+	height: 100% !important;
+	transform: translate(-50%, -50%);
+}
+
+.unauthorized_text{
+	top: 50%;
+    position: relative;
+    transform: translate(0,-50%);
+}

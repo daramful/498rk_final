@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Button, Input, Icon, Dropdown, Card, Image, Search, Segment, Grid} from 'semantic-ui-react'
+import { Button, Input, Icon, Dropdown, Card, Grid, Segment, Image } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import SongList from './SongList.jsx'
+import RecSongList from './RecSongList.jsx'
 import SidebarCategory from './SidebarCategory.jsx';
-import Music from './Music.jsx';
+import Authenticate from '../Authenticate/Authenticate.jsx'
+
 import Pusher from 'pusher-js';
 
 
@@ -14,6 +16,7 @@ class Channel extends Component {
         super(props);
         console.log("constructor");
         this.state={
+
             play: false,
             pause: true,
             updated: false,
@@ -25,193 +28,88 @@ class Channel extends Component {
             songName: "",
             artists: [],
             channelName: "",
+            channelID: "",
             keyword: "",
             categories: [],
             track: [],
             audioList: [],
+            isPlaying: false,
+            autoplayOn: false,
             currSongKey: 0,
-            value: "",
-            results: [],
-            channelID: ""
+            currSongName: "",
 
+            recTrackID: "",
+            recArtistID: "",
+            recommendations: []
         };
-
         this.play = this.play.bind(this);
         this.pause = this.pause.bind(this);
         this.playNextSong = this.playNextSong.bind(this);
+        this.autoPlayNextSong = this.autoPlayNextSong.bind(this);
         this.playPrevSong = this.playPrevSong.bind(this);
+
         this.addSong=this.addSong.bind(this);
-        this.deleteSong = this.deleteSong.bind(this);
+        this.addRecSong = this.addRecSong.bind(this);
+
+        this.deleteSong=this.deleteSong.bind(this);
+        this.stop=this.stop.bind(this);
+
+        this.setAutoPlay = this.setAutoPlay.bind(this);
+        this.getSongIndex = this.getSongIndex.bind(this);
+        this.getRecommendation = this.getRecommendation.bind(this);
+
+        this.autoplayStatus = false;
     }
 
-      playPrevSong(){
+    getRecommendation() {
 
-        var currKey = this.state.currSongKey
-        currKey -= 1
 
-        this.setState({
-            currSongKey: currKey
-        })
+            console.log('recTrackID ' + this.state.recTrackID)
+            console.log('recArtistID ' + this.state.recArtistID)
 
-        console.log("current key " + this.state.currSongKey)
-      }
-
-      playNextSong(){
-
-        var currKey = this.state.currSongKey
-        currKey += 1
-
-        this.setState({
-            currSongKey: currKey
-        })
-
-        console.log("current key " + this.state.currSongKey)
-
-      }
-      
-
-      play(){
-
-        alert("play song " + this.state.currSongKey)
-
-        this.setState({
-          play: true,
-          pause: false
-        });
-
-        this.state.audioList[this.state.currSongKey].play()
-      }
-      
-      pause(){
-        this.setState({
-          play: false,
-          pause: true
-        });
-
-        this.state.audioList[this.state.currSongKey].pause();
-      }
-
-    componentWillMount(){
-        this.pusher = new Pusher('64fe71b3db1ab2a99821',{cluster: "us2", encrypted: true});
-        this.channel = this.pusher.subscribe('mychannel');
-        console.log('component will mount');
-    }
-
-   componentDidMount() {
-
-        this.channel.bind('modified', this.updateEvents);
-        this.channel.bind('modified', this.addSong);
-        this.channel.bind('modified', this.deleteSong);
-        axios.get('/profile').then( (res) => {
-            this.setState({
-                isLoggedIn: true,
-                userInfo: res.data.user.profile,
-                accessToken: res.data.user.accessToken,
-                refreshToken: res.data.user.refreshToken
-            })
-        }).catch( (err) => {
-            this.setState({
-                isLoggedIn: false
-            })
-        });
-
-        axios.get('/channels/'+this.props.match.params.id)
-            .then((res)=>{
+            const BASE_URL = 'https://api.spotify.com/v1/recommendations?min_energy=0.4&market=US&min_popularity=30';
             
-            let playlists = [];
-            res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
-            //console.log("channel id " + res.data.data._id)
-            this.setState({
-                channelID: res.data.data._id,
-                audioList: playlists,
-                categories: res.data.data.playList,
-                channelName: this.props.match.params.id
-            });
-        }).catch((err)=>{
-            console.log(err);
-        });   
+            const BASE_TRACK_URL = '&seed_tracks=';
+            const BASE_ARTIST_URL = '&seed_artists=';
+            const BASE_GENRE_URL = '&seed_genres='
 
-    }
-    
-    componentWillReceiveProps(nextProps){
-        console.log("componentwillreceiveprops");;
-    }
-    
-    shouldComponentUpdate(nextProps, nextState){
-        console.log("shouldcomponentupdate");
-        return true;
-    }
+            let url = BASE_URL + BASE_TRACK_URL + this.state.recTrackID + BASE_ARTIST_URL + this.state.recArtistID;
 
-    componentDidUpdate(prevProps, prevState){
-        console.log("component did update");
-        console.log(this.state.track);
-        console.log(this.props);
-    }
 
-    componentWillUnmount(){
-        this.channel.unbind();
-        this.pusher.unsubscribe(this.channel);
-    }
-    updateEvents(data){
-        // var newArray
-    }
+            axios.get(url, 
+                { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
+                .then((res)=>{
+                    console.log('rec res')
+                    console.log(res)
+                    this.setState({
+                        recommendations: res.data.tracks
+                    });
 
-    search(e){
-        this.setState({
-            keyword: e.target.value
-        });
-        const BASE_URL = 'https://api.spotify.com/v1/search?';
-        const FETCH_URL = BASE_URL + 'q=' + e.target.value + '&type=track&limit=3';
-        axios.get(FETCH_URL, 
-            { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
-            .then((res)=>{
-                this.setState({
-                    track: res.data.tracks.items
+                }).catch((err)=>{
+                    console.log(err);
                 });
-            }).catch((err)=>{
-                console.log(err);
-            });
-    }
 
 
-    viewProfile(event){
-        axios.get('https://api.spotify.com/v1/me', 
-            { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
-            .then((res)=>{
-                console.log(res);
-            }).catch((err)=>{
-                console.log(err);
-            });
-        console.log(this.state.userInfo);
+        }
+         getSongIndex(e) {
 
-    }
-    logOut(event){
-        this.setState({
-            loggedin: false
-        });
-    }
-    addSong(){
+            { this.stop() } 
 
-        axios.get('/channels/'+this.state.channelName)
-            .then((res)=>{
-            console.log(res);
-            var newSong = res.data.data.playList[res.data.data.playList.length-1];
-            var playlists = this.state.audioList;
-            playlists.push(new Audio(newSong.url));
+            //alert('index ' + e)
             this.setState({
-                audioList: playlists,
-                categories: res.data.data.playList
-            });
-            }).catch((err)=>{
-                console.log(err);
-        });
-    }
+                recTrackID: this.state.categories[e].trackID,
+                recArtistID: this.state.categories[e].artistID,
+                currSongName: this.state.categories[e].songName + " by " + this.state.categories[e].artist,
+                currSongKey: e
+            })
 
 
+            this.state.audioList[e].play()
 
-        deleteSong(e) {
 
-            //alert("Song deleted " + e);
+        }
+
+        deleteSong(f) {
 
             var i = 'notchanged';
 
@@ -255,46 +153,364 @@ class Channel extends Component {
 
         }
 
+      playPrevSong(){
+
+        if(this.state.audioList.length === 0) {
+
+            alert('The song list is blank! Add songs to play.')
+
+        } else {
+
+            this.state.audioList[this.state.currSongKey].currentTime = 0;
+
+            this.state.audioList[this.state.currSongKey].pause();
+
+            if(this.state.currSongKey == 0) currKey = this.state.audioList.length - 1;
+
+            else {
+                var currKey = this.state.currSongKey
+                currKey -= 1
+            }
+
+            this.setState({
+                recTrackID: this.state.categories[currKey].trackID,
+                recArtistID: this.state.categories[currKey].artistID,
+                currSongName: this.state.categories[currKey].songName + " by " + this.state.categories[currKey].artist,
+                currSongKey: currKey
+            })
+
+            this.state.audioList[currKey].play()
+
+        }
+
+      }
+
+     playNextSong(){
+
+            if(this.state.audioList.length === 0) {
+
+                alert('The song list is blank! Add songs to play.')
+
+            } else {
+
+
+                this.state.audioList[this.state.currSongKey].currentTime = 0;
+
+                this.state.audioList[this.state.currSongKey].pause();
+
+                if(this.state.currSongKey == this.state.audioList.length - 1) currKey = 0;
+
+                    
+                else {
+                    var currKey = this.state.currSongKey
+                    currKey += 1
+                }
+
+                this.setState({
+                    recTrackID: this.state.categories[currKey].trackID,
+                    recArtistID: this.state.categories[currKey].artistID,
+                    currSongName: this.state.categories[currKey].songName + " by " + this.state.categories[currKey].artist,
+                    currSongKey: currKey
+                })
+
+                this.state.audioList[currKey].play()
+                //{ this.play() }
+            }
+
+      }
+      autoPlayNextSong() {
+
+        if(this.state.audioList.length === 0) {
+
+            alert('The song list is blank! Add songs to play.')
+
+        } else {
+
+                if(this.state.autoplayOn === false) { }
+
+                else {
+                    this.state.audioList[this.state.currSongKey].currentTime = 0;
+
+                    this.state.audioList[this.state.currSongKey].pause();
+
+                    if(this.state.currSongKey == this.state.audioList.length - 1) currKey = 0;
+
+                        
+                    else {
+                        var currKey = this.state.currSongKey
+                        currKey += 1
+                    }
+
+                    this.setState({
+                        recTrackID: this.state.categories[currKey].trackID,
+                        recArtistID: this.state.categories[currKey].artistID,
+                        currSongName: this.state.categories[currKey].songName + " by " + this.state.categories[currKey].artist,
+                        currSongKey: currKey
+                    })
+
+                    { this.play() }
+                }
+
+        }
+
+      }
+      play(){
+
+        if(this.state.audioList.length === 0) {
+
+            alert('The song list is blank! Add songs to play.')
+
+        } else {
+
+            this.setState({
+                recTrackID: this.state.categories[this.state.currSongKey].trackID,
+                recArtistID: this.state.categories[this.state.currSongKey].artistID,
+              currSongName: this.state.categories[this.state.currSongKey].songName + " by " + this.state.categories[this.state.currSongKey].artist,
+              isPlaying: true,
+              play: true,
+              pause: false
+            });
+
+            console.log('ttt ' + this.state.categories[this.state.currSongKey].trackID);
+
+            this.state.audioList[this.state.currSongKey].play();
+
+            var currKey = this.state.currSongKey;
+            var currSong = this.state.audioList[this.state.currSongKey];
+            var nextSong = this.state.audioList[this.state.currSongKey + 1]
+        
+            var currentAutoPlay = this.state.autoplayOn;
+
+            var stopSong = function(){ this.stop() }
+            var nextSong = function(){ this.playNextSong() }
+
+            if(this.state.autoplayOn === true) {
+                setTimeout(this.autoPlayNextSong, this.state.audioList[this.state.currSongKey].duration * 1010);
+            }
+        }
+
+        
+      }
+
+      stop() {
+
+        
+        for(var i = 0; i < this.state.audioList.length; i++) {
+
+
+            
+        this.state.audioList[i].currentTime = 0;
+        this.state.audioList[i].pause();
+
+        //this.state.audioList[this.state.currSongKey].pause();
+        //{ this.pause() }
+        }
+
+    }
+      pause(){
+
+        this.setState({
+          play: false,
+          pause: true
+        });
+
+        this.state.audioList[this.state.currSongKey].pause();
+      }
+
+    setAutoPlay(e) {
+
+        var fv = false;
+        var tv = true;
+
+        console.log(e.target.value)
+
+        if(e.target.value == "on") {
+            this.setState({
+                autoplayOn : tv
+
+            });
+
+        } 
+
+        if(e.target.value == "off") {
+            this.setState({
+                autoplayOn : fv
+            });
+        }
+
+    }
+
+    componentWillMount(){
+        this.pusher = new Pusher('64fe71b3db1ab2a99821',{cluster: "us2", encrypted: true});
+        this.channel = this.pusher.subscribe('mychannel');
+        console.log('component will mount');
+    }
+
+   componentDidMount() {
+
+        // this.channel.bind('modified', this.updateEvents);
+        this.channel.bind('modified', this.addSong);
+        this.channel.bind('modified', this.deleteSong);
+        axios.get('/profile').then( (res) => {
+            this.setState({
+                isLoggedIn: true,
+                userInfo: res.data.user.profile,
+                accessToken: res.data.user.accessToken,
+                refreshToken: res.data.user.refreshToken
+            })
+        }).catch( (err) => {
+            this.setState({
+                isLoggedIn: false
+            })
+        });
+
+        axios.get('/channels/'+this.props.match.params.id)
+            .then((res)=>{
+            
+            let playlists = [];
+            res.data.data.playList.map((value, key) => playlists.push(new Audio(value.url)));
+            //console.log("channel id " + res.data.data._id)
+            this.setState({
+                channelID: res.data.data._id,
+                audioList: playlists,
+                categories: res.data.data.playList,
+                channelName: this.props.match.params.id
+            });
+        }).catch((err)=>{
+            console.log(err);
+        });   
+
+    }
+    
+    componentWillReceiveProps(nextProps){
+        console.log("componentwillreceiveprops");;
+    }
+    
+    shouldComponentUpdate(nextProps, nextState){
+        console.log("shouldcomponentupdate");
+        return (this.state != nextState);
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        console.log("component did update");
+        this.autoplayStatus = this.state.autoplayOn;
+
+    }
+
+    componentWillUnmount(){
+        this.channel.unbind();
+        this.pusher.unsubscribe(this.channel);
+    }
+
+
+    search(event){
+        this.setState({
+            keyword: event.target.value
+        });
+        const BASE_URL = 'https://api.spotify.com/v1/search?';
+        const FETCH_URL = BASE_URL + 'q=' + event.target.value + '&type=track&limit=30';
+        axios.get(FETCH_URL, 
+            { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
+            .then((res)=>{
+                this.setState({
+                    track: res.data.tracks.items
+                });
+
+            }).catch((err)=>{
+                console.log(err);
+            });
+    }
+
+
+
+    viewProfile(event){
+        axios.get('https://api.spotify.com/v1/me', 
+            { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
+            .then((res)=>{
+                console.log(res);
+            }).catch((err)=>{
+                console.log(err);
+            });
+        console.log(this.state.userInfo);
+
+    }
+    logOut(event){
+        this.setState({
+            loggedin: false
+        });
+    }
+    addRecSong(){
+
+        axios.get('/channels/'+this.state.channelName)
+            .then((res)=>{
+            console.log(res);
+            var newSong = res.data.data.playList[res.data.data.playList.length-1];
+            var playlists = this.state.audioList;
+            playlists.push(new Audio(newSong.url));
+            this.setState({
+                audioList: playlists,
+                categories: res.data.data.playList
+            });
+            console.log(this.state.audioList)
+            console.log('cate')
+            console.log(this.state.categories)
+            }).catch((err)=>{
+                console.log(err);
+        });
+
+    }
+
+    addSong(){
+
+        axios.get('/channels/'+this.state.channelName)
+            .then((res)=>{
+            console.log(res);
+            var newSong = res.data.data.playList[res.data.data.playList.length-1];
+            var playlists = this.state.audioList;
+            playlists.push(new Audio(newSong.url));
+            this.setState({
+                audioList: playlists,
+                categories: res.data.data.playList
+            });
+            console.log(this.state.audioList)
+            console.log('cate')
+            console.log(this.state.categories)
+            }).catch((err)=>{
+                console.log(err);
+        });
+
+    }
+
+
+
     render() {
 
         const mapToComponents = (data) => {
             if(this.state.keyword == '') return [];
 
             return data.map((eachData, index) => {
-                return (  <SongList key={ index } track = { eachData } channelName={this.state.channelName} onMusicClick={this.addSong} /> );
+                return (  <SongList key={ index } track = { eachData } channelName={ this.state.channelName } onMusicClick={ this.addSong } /> );
+            });
+        };
+
+        const mapRecSongToComponents = (data) => {
+
+            return data.map((eachData, index) => {
+                return (  <RecSongList key={ index } recs = { eachData } channelName={ this.state.channelName } onRecMusicClick = { this.addRecSong }/> );
             });
         };
 
         if (this.state.isLoggedIn){
             return(
                 <div className="home">
-                    <div className="ui fixed inverted menu">
-                        <div className="ui container">  
-                            <div className="menu item">
-                                MIC DROP
-                            </div>
-                            <div className="menu item">
-                                Home
-                            </div>
-                            <div className="menu item">
-                                About
-                            </div>
-                            <div className="menu item right" />
-                            <div className="profileImage">
-                                <Image className="ui small circular image" src={this.state.userInfo.photos[0]} onClick={(e)=>this.viewProfile(e)}/>
-                            </div>
-                            <div className="menu item" onClick={(e)=>this.viewProfile(e)}>{this.state.userInfo.displayName}</div>
-                            <Link to="/" onClick={this.logOut}>
-                                <Button className="ui yellow button">
-                                    Log Out
-                                </Button>   
-                            </Link>
-                       </div>
-                   </div>
-                        <div className="ui main text" style={{marginLeft: 10+'%', marginRight: 10+'%', marginBottom: 5+'%'}}>
+                    
+                         <div className="ui main text" style={{marginLeft: 10+'%', marginRight: 10+'%', marginBottom: 5+'%'}}>
                             <h1 className="ui header container">
                                 Welcome to Channel "<span className="ui header red">{this.state.channelName}</span>"
                             </h1> 
+                            <h2>
+                                 {  }
+                            </h2>
                         <Grid celled='internally'>
                         <Grid.Row>
 
@@ -308,18 +524,43 @@ class Channel extends Component {
                         </Grid.Column>
                         <Grid.Column width={12}> 
                             <div>
-                                <Button onClick = {this.playPrevSong}>Prev</Button>
-                                <Button onClick = { this.play }>Play</Button>
-                                <Button onClick = {this.pause}>Pause</Button>
-                                <Button onClick = {this.playNextSong}>Next</Button>
+                                <h2>
+                                 { this.state.currSongName }
+                                </h2>
 
-                                <SidebarCategory categories={this.state.categories} onSongListClick = {(e) => this.deleteSong(e)} channelID={ this.state.channelID } />
+
+                                    <Button onClick = {this.playPrevSong}>Prev</Button>
+                                    <Button onClick = { this.play }>Play</Button>
+                                    <Button onClick = { this.stop }>Stop</Button>
+                                    <Button onClick = {this.pause}>Pause</Button>
+                                    <Button onClick = {this.playNextSong}>Next</Button>
+                                    <Button onClick = {this.getRecommendation}>Get Recommendation</Button>
+                                    <div style = {{ marginTop: 5}}>
+                                    <span>
+                                      { mapRecSongToComponents(this.state.recommendations) }  
+                                    </span>
+                                </div>
+
+                    <form>
+                        
+                        <Input className="button" type="radio" value="on"
+                         onChange={(e) => {this.setAutoPlay(e)}}
+                         checked = { this.state.autoplayOn === true }/>
+                        On
+
+                        <Input className="button" type="radio" value="off"
+                         onChange={(e) => {this.setAutoPlay(e)}}
+                         checked = { this.state.autoplayOn === false }/>
+                        Off
+
+                    </form>
+
+                                <SidebarCategory categories={this.state.categories} receiveSongIndex = {(f) => this.getSongIndex(f)} onSongListClick = {(e) => this.deleteSong(e)} channelID={ this.state.channelID } currentIndex = {this.state.currSongKey} />
                             </div>
                         </Grid.Column>
                         </Grid.Row>
                         </Grid>
-                    </div>
-
+                    </div>  
 
                     <div className="ui inverted vertical footer segment">
                     <div className="ui center aligned container">
@@ -341,20 +582,11 @@ class Channel extends Component {
                 </div>
                 </div>
             )
-        }else{
+        }
+        else{
+
             return(
-                <div className="unauthorized">
-                    <Card className="olive card">
-                        <div className="unauthorized_text">
-                            <h1>You must log in before you can see this page</h1>
-                            <Link to="/login">
-                                <Button className="ui olive button">
-                                    LOGIN
-                                </Button>
-                            </Link>
-                        </div>
-                    </Card>
-                </div>
+                <Authenticate />
             )
         }
 

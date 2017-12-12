@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Button, Card, Image, Input, Form, Modal } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-// import styles from './JoinParty.scss'
+
+
+import Authenticate from '../Authenticate/Authenticate.jsx'
 
 class JoinParty extends Component {
 
@@ -10,58 +12,36 @@ class JoinParty extends Component {
         super(props);
         this.state = {
             isLoggedIn: false,
-            userInfo: [],
-            accessToken: "",
-            refreshToken: "",
             partyName: "",
             channelExists: false,
             openModal: false
         };
-        this.logOut = this.logOut.bind(this);
     }
 
     componentDidMount() {
         axios.get('/profile').then( (res) => {
             this.setState({
-                isLoggedIn: true,
-                userInfo: res.data.user.profile,
-                accessToken: res.data.user.accessToken,
-                refreshToken: res.data.user.refreshToken
+                isLoggedIn: true
             });
         }).catch( (err) => {
             this.setState({
-                isLoggedIn: false,
-                userInfo: [],
-                userName: "",
-                userPhoto: "",
-                accessToken: "",
-                refreshToken: ""
+                isLoggedIn: false
             });
         });
-        console.log('asd');
+
     }
 
     shouldComponentUpdate(nextProps, nextState){
         console.log("shouldcomponentupdate");
-        return true;
+        if (nextState!=this.state)
+            return true;
     }
+
 
     componentDidUpdate(prevProps, prevState){
         console.log("channel created:")
         console.log(this.state.channelCreated);
     }
-    viewProfile(event){
-        axios.get('https://api.spotify.com/v1/me', 
-            { headers: { 'Authorization': 'Bearer ' + this.state.accessToken } })
-            .then((res)=>{
-                console.log(res);
-            }).catch((err)=>{
-                console.log(err);
-            });
-        console.log(this.state.userInfo);
-
-    }
-
 
     inputPartyName(event){
         this.setState({
@@ -99,39 +79,10 @@ class JoinParty extends Component {
         });
     }
 
-    logOut() {
-        axios.get('/logout').then( (res) => {
-            console.log("Logged out");
-        })
-    }
-
     render() {
-        if (this.state.isLoggedIn) {
+        if (this.state.isLoggedIn){
             return(
                 <div className="JoinParty">
-                    <div className="ui fixed inverted menu">
-                        <div className="ui container">  
-                            <div className="menu item">
-                                MIC DROP
-                            </div>
-                            <div className="menu item">
-                                Home
-                            </div>
-                            <div className="menu item">
-                                About
-                            </div>
-                            <div className="menu item right" />
-                            <div className="profileImage">
-                                <Image className="ui small circular image" src={this.state.userInfo.photos[0]} onClick={(e)=>this.viewProfile(e)}/>
-                            </div>
-                            <div className="menu item" onClick={(e)=>this.viewProfile(e)}>{this.state.userInfo.displayName}</div>
-                            <Link to="/" onClick={this.logOut}>
-                                <Button className="ui yellow button">
-                                    Log Out
-                                </Button>   
-                            </Link>
-                        </div>
-                    </div>
                     <div className="ui main text container">
                         <h1 className="ui header">
                         JOIN THE PARTY!!!
@@ -192,21 +143,11 @@ class JoinParty extends Component {
                         </div>
                     </div>
                 </div>
-            )
-        } else {
+            )}
+            else{
+
             return(
-                <div className="unauthorized">
-                    <Card className="olive card">
-                        <div className="unauthorized_text">
-                            <h1>You must log in before you can see this page</h1>
-                            <Link to="/login">
-                                <Button className="ui olive button">
-                                    LOGIN
-                                </Button>
-                            </Link>
-                        </div>
-                    </Card>
-                </div>
+                <Authenticate />
             )
         }
     }

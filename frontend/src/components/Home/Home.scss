@@ -1,20 +1,48 @@
+.ui.small.circular.image {
+	width: auto;
+	height: 40px;
+}
 .ui.fixed.inverted.menu {
 	position: sticky;
+    height: 50px;
 }
-	
+
 .menu.item.right {
 	float: right;
 }
-	
+
 .ui.container {
 	padding-top: 5px;
 	padding-bottom: 5px;
 }
-
 .ui.button {
-	height: 40px;
+	width: auto;
+	height: 40px;	
 }
-	
+.unauthorized{
+	top: 50%;
+    position: absolute;
+    left: 50%;
+    width: 60%;
+    height: 20%;
+}
+.olive.card{
+	text-align: center;
+	width: 100% !important;
+	height: 100% !important;
+	transform: translate(-50%, -50%);
+}
+.unauthorized_text{
+	top: 50%;
+    position: relative;
+    transform: translate(0,-50%);
+}
+.partyButtons{
+	transform: translate(0,200%);
+}
+.ui.inverted.vertical.footer.segment {
+	transform: translate(0,150%);
+}	
 .mainVideo {
 	text-align: center;
 	width: 100%;

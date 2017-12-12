@@ -15,49 +15,53 @@ export class SidebarCategory extends React.Component {
     };
 
     this.clickSongListHandler = this.clickSongListHandler.bind(this);
+    this.sendIndex = this.sendIndex.bind(this);
 
   }
 
-    clickSongListHandler(e) {
-
-
-      console.log(e)
-      this.props.onSongListClick(e);
+    clickSongListHandler(e, f) {
 
         axios.delete('/channels/playlist/song?channelId=' + this.props.channelID + '&songId=' + e).then((res)=>{
 
-            this.props.onSongListClick();
+            this.props.onSongListClick(f);
             console.log("deleted song");
         }).catch((err)=>{
             console.log(err);
         });   
 
+    }
+
+    sendIndex(e) {
+
+      console.log(e)
+      this.props.receiveSongIndex(e);
 
     }
 
-
     render() {
               return (
-            <div className="ui icon message">
-            <div className="item">
-                <div className="content" >
-                <a className="header">
-                {this.props.categories.map((category, key) =>(
-                    <div key={key} className="ui divider" style={{padding: 1 + 'em'} }>
-                        <i className="large spotify middle aligned icon"></i>
-                        <span>{category.songName}</span>- <span>{category.artist}</span>
-                        <Button
-                                onClick = { (e) => this.clickSongListHandler(category._id) }
-                             >X</Button>
-                    </div>                            
-                    ))}
-                </a>
-                <div className="ui divider"></div>
-                </div>
-            </div>
-            </div>    
+                    
+                    <Card.Group>
+                    <Card className="songAppended">
+                      <Card.Content>
+                      {this.props.categories.map((category, key) =>(
+                            <div key={key} style={{padding: 1 + 'em'} }>
+                      <Card.Header>
+                          <Button id="xx" onClick = {  (e) => this.sendIndex(key) }>></Button>  
+                          <Button id="xx" onClick = { (e) => this.clickSongListHandler(category._id)}>X</Button>                        
+                      </Card.Header>
+                        <Card.Description>
+                        <span>{category.songName}</span> - By <span>{category.artist}</span>
+                        <div className="ui divider"></div>
+                        </Card.Description>
+                        </div>                            
+                        ))}                        
+                      </Card.Content>
+                    </Card>
+                    <div className="ui divider"></div>
+                    </Card.Group>         
+                    
         );
-
 
 
     }

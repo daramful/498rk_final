@@ -57,11 +57,14 @@ class Home extends Component {
 	joinExist(event){
     	
     }
-	logOut(event){
-		this.setState({
-			isLoggedIn: false
-		});
-	}
+	logOut() {
+        axios.get('/logout').then( (res) => {
+            this.setState({
+                isLoggedIn: false
+            });
+            console.log("Logged out");
+        })
+    }
     searchHandler(){
 
     }

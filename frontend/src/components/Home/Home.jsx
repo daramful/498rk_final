@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Input, Icon,Dropdown,Card} from 'semantic-ui-react'
+import { Button, Input, Icon,Dropdown,Card,Image} from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
@@ -11,7 +11,6 @@ class Home extends Component {
         super(props);
         console.log("constructor");
         this.state={
-            isLoggedIn: false,
             query: "",
             track: "",
             artists: []
@@ -48,44 +47,12 @@ componentWillUnmount(){
     console.log("componentWillUnmount");
 }
 
-startNew(event){
-
-}
-joinExist(event){}
-
-logOut(event){
-    this.setState({
-    isLoggedIn: false
-    });
-}
-
 render() {
     return(
         <div className="home">
-            <div className="ui fixed inverted menu">
-                <div className="ui container">  
-                    <div className="menu item">
-                        <i id="mic" className="fa fa-microphone" aria-hidden="true"> </i>  DROP
-                    </div>
-                    <div className="menu item">
-                        <i class="fa fa-home" aria-hidden="true"></i>  Home
-                    </div>
-                    <div className="menu item">
-                        <i class="fa fa-globe" aria-hidden="true"></i>  About
-                    </div>
-                    <div className="menu item right" />
-                        <Link to="/login">
-                        <Button className="ui yellow button">Login</Button>
-                        </Link>
-                        <Link to="/signup">
-                        <Button className="ui yellow button">Sign Up</Button>
-                        </Link>
-                        <Button className="ui black button">Help</Button>   
-                </div>
-            </div>
             <div className="ui main text container">
                 <div className="mainVideo container">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/ckdsJ-LaCvM?start=32&rel=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>                    </div>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/ckdsJ-LaCvM?start=32&rel=0" frameBorder="0" gesture="media" allow="encrypted-media" allowFullScreen></iframe>                    </div>
                     <hr />
                     <div className="ui header" id="animated_div">
                         <h1>What is <i id="mic" className="fa fa-microphone" aria-hidden="true"></i> Drop?</h1>

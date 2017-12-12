@@ -22,7 +22,9 @@ class SongList extends Component {
             playList: {
                 songName: this.props.track.name,
                 artist: this.props.track.artists[0].name,
-                url: this.props.track.preview_url
+                url: this.props.track.preview_url,
+                trackID: this.props.track.id,
+                artistID: this.props.track.artists[0].id
             }
         }).then((res)=>{
             this.props.onMusicClick(this.props.track);
@@ -31,6 +33,7 @@ class SongList extends Component {
         }).catch((err)=>{
             console.log(err);
         });   
+    
     
     }
 
@@ -54,7 +57,7 @@ class SongList extends Component {
                     <Card className = "RecSongList"
                     onClick = { this.clickMusicHandler }
                     value = { this.props.track.preview_url} >
-                        <Card.Content>
+                        <Card.Content style={{display: 'block'}}>
                             <Card.Header className="RecSongList_header">
                                 { this.props.track.name }
                             </Card.Header>
@@ -65,7 +68,6 @@ class SongList extends Component {
                     </Card>
             );
         }
-
 
 
   }

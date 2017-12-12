@@ -5,7 +5,9 @@ var ChannelSchema = new mongoose.Schema({
 	playList: [{
 		songName: { type : String },
 		artist: { type : String },
-		url: { type : String }
+		url: { type : String },
+		trackID: { type : String },
+      	artistID: { type : String }
 	}]
 })
 
