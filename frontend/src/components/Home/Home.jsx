@@ -52,11 +52,12 @@ render() {
         <div className="home">
             <div className="ui main text container">
                 <div className="mainVideo container">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/ckdsJ-LaCvM?start=32&rel=0" frameBorder="0" gesture="media" allow="encrypted-media" allowFullScreen></iframe>                    </div>
-                    <hr />
-                    <div className="ui header" id="animated_div">
-                        <h1>What is <i id="mic" className="fa fa-microphone" aria-hidden="true"></i> Drop?</h1>
-                    </div> 
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/i5UAfAvYbRo" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>                    
+                </div>
+                <hr />
+                <div className="ui header" id="animated_div">
+                    <h1>What is <i id="mic" className="fa fa-microphone" aria-hidden="true"></i> Drop?</h1>
+                </div> 
 
                 <div className="description">
                         <ul>
