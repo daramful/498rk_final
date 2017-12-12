@@ -28,6 +28,6 @@ own song medley player.
 - Hyung Eun Lee (hlee295@illinois.edu)
 - Jae Min Song (jsong78@illinois.edu)
 - Yong Jin Kim (ykim164@illinois.edu)
-- Hyun Woo Park (hpark125)
+- Hyun Woo Park (hpark125@illinois.edu)
 
 
