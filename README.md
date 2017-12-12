@@ -1,9 +1,5 @@
 # FINAL PROJECT MIC DROP by TEAM NAME
 
-![alt text](https://imgur.com/a/xfRsB)
-
-
-
 ## Table of Contents
 1. [Explanation of Our App](#explanation)
 2. [Environment Setup Guide](#environment-setup-guide)
@@ -29,9 +25,9 @@ own song medley player.
 
 ## Developers
 
-Hyung Eun Lee (hlee295@illinois.edu)
-Jae Min Song (jsong78@illinois.edu)
-Yong Jin Kim (ykim164@illinois.edu)
-Hyun Woo Park (hpark125)
+- Hyung Eun Lee (hlee295@illinois.edu)
+- Jae Min Song (jsong78@illinois.edu)
+- Yong Jin Kim (ykim164@illinois.edu)
+- Hyun Woo Park (hpark125)
 
 
