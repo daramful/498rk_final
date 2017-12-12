@@ -35,3 +35,71 @@
 .ui.button {
 	height: 40px;	
 }
+
+#xx{
+	float: right;
+	background-color: transparent!important;
+	margin-top: -2%;
+}
+
+.songAppended{
+	width: 100%!important;
+}
+
+.ui.cards a.card, .ui.link.card, .ui.link.cards .card, a.ui.card {
+	width: 100%;
+}
+
+.ui.cards{
+	margin-top: 0em!important;
+}
+
+.lookUpSongsInput{
+	width: 100%;
+}
+
+.recommendedLists{
+	width: 100%;
+}
+
+.autoplayOption.button{
+	padding: 0;
+	background-color: transparent!important;
+}
+
+.fa {
+	resize: 300%;
+}
+
+.fa-arrow-circle-left{
+	color: darkorange;
+}
+
+.fa-play-circle{
+	color: green;
+} 
+
+.fa-stop-circle{
+	color: red;
+	
+}
+
+.fa-pause-circle{
+	color: yellow;
+} 
+
+.fa-arrow-circle-right{
+	color: darkorange;
+}
+
+i.fa-magic{
+	color: plum;
+}
+
+.fa-play{
+	color: green;
+}
+
+.fa-window-close-o{
+	color: black;
+}

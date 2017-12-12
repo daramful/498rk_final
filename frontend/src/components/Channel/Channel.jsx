@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Input, Icon, Dropdown, Card, Grid, Segment, Image } from 'semantic-ui-react'
+import { Button, Input, Icon, Dropdown, Card, Grid, Segment, Image, Label } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import SongList from './SongList.jsx'
@@ -8,6 +8,8 @@ import SidebarCategory from './SidebarCategory.jsx';
 import Authenticate from '../Authenticate/Authenticate.jsx'
 
 import Pusher from 'pusher-js';
+
+import style from './Channel.scss'
 
 
 class Channel extends Component {
@@ -347,7 +349,6 @@ class Channel extends Component {
     }
 
    componentDidMount() {
-
         // this.channel.bind('modified', this.updateEvents);
         this.channel.bind('modified', this.addSong);
         this.channel.bind('modified', this.deleteSong);
@@ -484,7 +485,6 @@ class Channel extends Component {
 
 
     render() {
-
         const mapToComponents = (data) => {
             if(this.state.keyword == '') return [];
 
@@ -514,27 +514,25 @@ class Channel extends Component {
                         <Grid celled='internally'>
                         <Grid.Row>
 
-                        <Grid.Column width={4}> 
-                            <div>
-                                <Input type="text" placeholder="search for a song to add to your playlist" ref="query" onChange={(e) => {this.search(e)}}/>
+                        <Grid.Column tablet={16} computer={4}> 
+                            <div className="lookUpSongs">
+                                <Input className="lookUpSongsInput" type="text" placeholder="search for a song" ref="query" onChange={(e) => {this.search(e)}}/>
                                 <div className="recommendedLists">
                                     { mapToComponents(this.state.track) }
                                 </div>  
                             </div>
                         </Grid.Column>
-                        <Grid.Column width={12}> 
+                        <Grid.Column tablet={16} computer={12}> 
                             <div>
                                 <h2>
                                  { this.state.currSongName }
                                 </h2>
-
-
-                                    <Button onClick = {this.playPrevSong}>Prev</Button>
-                                    <Button onClick = { this.play }>Play</Button>
-                                    <Button onClick = { this.stop }>Stop</Button>
-                                    <Button onClick = {this.pause}>Pause</Button>
-                                    <Button onClick = {this.playNextSong}>Next</Button>
-                                    <Button onClick = {this.getRecommendation}>Get Recommendation</Button>
+                                    <Button className="ui inverted" onClick = {this.playPrevSong}><i className="fa fa-arrow-circle-left" aria-hidden="true"></i></Button>
+                                    <Button className="ui inverted" onClick = { this.play }><i className="fa fa-play-circle" aria-hidden="true"></i></Button>
+                                    <Button className="ui inverted" onClick = { this.stop }><i className="fa fa-stop-circle" aria-hidden="true"></i></Button>
+                                    <Button className="ui inverted" onClick = {this.pause}><i className="fa fa-pause-circle" aria-hidden="true"></i></Button>
+                                    <Button className="ui inverted" onClick = {this.playNextSong}><i className="fa fa-arrow-circle-right" aria-hidden="true"></i></Button>
+                                    <Button className="ui inverted" onClick = {this.getRecommendation}><i className="fa fa-magic" aria-hidden="true">Recommendation</i></Button>
                                     <div style = {{ marginTop: 5}}>
                                     <span>
                                       { mapRecSongToComponents(this.state.recommendations) }  
@@ -542,20 +540,31 @@ class Channel extends Component {
                                 </div>
 
                     <form>
-                        
-                        <Input className="button" type="radio" value="on"
-                         onChange={(e) => {this.setAutoPlay(e)}}
-                         checked = { this.state.autoplayOn === true }/>
-                        On
 
-                        <Input className="button" type="radio" value="off"
-                         onChange={(e) => {this.setAutoPlay(e)}}
-                         checked = { this.state.autoplayOn === false }/>
-                        Off
+                    <Button as='div' labelPosition='right'>
+                        <Button icon>
+                            <Input className="button autoplayOption" type="radio" value="on"
+                                onChange={(e) => {this.setAutoPlay(e)}}
+                                checked = { this.state.autoplayOn === true }/>
+                            <Icon name='repeat' />
+                        </Button>
+                        <Label as='a' basic pointing='left'>Autoplay</Label>                        
+                    </Button>
+
+
+                    <Button as='div' labelPosition='right'>
+                        <Button icon>
+                            <Input className="button autoplayOption" type="radio" value="off"
+                            onChange={(e) => {this.setAutoPlay(e)}}
+                            checked = { this.state.autoplayOn === false }/>                    
+                            <Icon name='unlinkify' />
+                        </Button>
+                        <Label as='a' basic pointing='left'>Stop Autoplay</Label>
+                    </Button>
 
                     </form>
 
-                                <SidebarCategory categories={this.state.categories} receiveSongIndex = {(f) => this.getSongIndex(f)} onSongListClick = {(e) => this.deleteSong(e)} channelID={ this.state.channelID } currentIndex = {this.state.currSongKey} />
+                            <SidebarCategory categories={this.state.categories} receiveSongIndex = {(f) => this.getSongIndex(f)} onSongListClick = {(e) => this.deleteSong(e)} channelID={ this.state.channelID } currentIndex = {this.state.currSongKey} />
                             </div>
                         </Grid.Column>
                         </Grid.Row>
