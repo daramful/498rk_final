@@ -39,6 +39,9 @@ app.route('/joinParty').get(function(req,res) {
 app.route('/contact').get(function(req,res) {
 	return res.sendFile(path.join(__dirname, './backend/static/index.html'));
 })
+app.route('/about').get(function(req,res) {
+	return res.sendFile(path.join(__dirname, './backend/static/index.html'));
+})
 /* New things ================================================================ */
 
 require('./backend/models').connect(config.dbUri);
