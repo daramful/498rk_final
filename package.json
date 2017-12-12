@@ -2,7 +2,7 @@
   "name": "final_project",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "start": "nodemon --use_strict server.js",
     "dev": "webpack"
@@ -35,7 +35,7 @@
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.1.0",
     "method-override": "^2.3.10",
-    "mongoose": "^4.13.6",
+    "mongoose": "^4.13.7",
     "normalize.css": "^6.0.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",

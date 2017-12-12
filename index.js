@@ -11,6 +11,11 @@ var path = require('path'),
 	methodOverride = require('method-override'),
 	session = require('express-session');
 
+const Mongoose = require('mongoose');
+Mongoose.Promise = global.Promise;
+				 
+Mongoose.connect(config.dbUri, { useMongoClient: true } );
+
 app.use(express.static('./backend/static/'));
 app.use(express.static('./frontend/dist/'));
 
