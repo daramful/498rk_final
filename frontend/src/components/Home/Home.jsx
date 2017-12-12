@@ -68,10 +68,10 @@ render() {
                         <i id="mic" className="fa fa-microphone" aria-hidden="true"> </i>  DROP
                     </div>
                     <div className="menu item">
-                        <i class="fa fa-home" aria-hidden="true"></i>  Home
+                        <i className="fa fa-home" aria-hidden="true"></i>  Home
                     </div>
                     <div className="menu item">
-                        <i class="fa fa-globe" aria-hidden="true"></i>  About
+                        <i className="fa fa-globe" aria-hidden="true"></i>  About
                     </div>
                     <div className="menu item right" />
                         <Link to="/login">

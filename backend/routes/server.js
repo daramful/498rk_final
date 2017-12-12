@@ -2,8 +2,6 @@ var request = require('request');
 var querystring = require('querystring');
 var channel = require('../models/channel');
 var Pusher = require('pusher');
-const mongoose = require('mongoose'); // you must have this
-const ObjectId = mongoose.Types.ObjectId; // gets the function
 
 module.exports = function(router, passport) {
 
