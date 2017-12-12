@@ -11,6 +11,7 @@ import Channel from './components/Channel/Channel.jsx';
 import HomeBar from './components/Home/HomeBar.jsx';
 import Authenticate from './components/Authenticate/Authenticate.jsx';
 import Contact from './components/Contact/Contact.jsx';
+import About from './components/About/About.jsx';
 import styles from './styles/main.scss';
 
 
@@ -27,6 +28,7 @@ render(
         			<Route exact path="/channels/:id" component={Channel}/>
                     <Route exact path="/authenticate" component={Authenticate}/>
                     <Route exact path="/contact" component={Contact}/>
+                    <Route exact path="/about" component={About}/>
                 </Switch>
         </div>
     </Router>,
