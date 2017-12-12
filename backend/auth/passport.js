@@ -5,8 +5,8 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 
 // var consolidate = require('consolidate');
 
-var appKey = 'ed36a056ee504173a3889b2e55cbd461';
-var appSecret = '28184e92635b420eb7a74a91a2e9a392';
+var appKey = 'a4145a1786da4557811f568ca5d82a10';
+var appSecret = '3fe44e27e4094d6793e02b8358ec197b';
 
 /**
 * Specifies what strategy we'll use

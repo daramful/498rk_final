@@ -13,8 +13,8 @@ module.exports = function(router, passport) {
     //         res.status(200).json({ user: req.user.email
     //     });
     // });
-    var client_id = 'ed36a056ee504173a3889b2e55cbd461';
-    var client_secret = '28184e92635b420eb7a74a91a2e9a392';
+    var client_id = 'a4145a1786da4557811f568ca5d82a10';
+    var client_secret = '3fe44e27e4094d6793e02b8358ec197b';
     var redirect_uri = 'https://mic-drop498.herokuapp.com/auth/spotify/callback';
 
 
