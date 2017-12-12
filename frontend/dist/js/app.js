@@ -915,7 +915,7 @@ module.exports = warning;
 /* 19 */
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.5.2' };
+var core = module.exports = { version: '2.5.3' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -4245,12 +4245,12 @@ var Authenticate = function (_Component) {
                             'You must log in before you can see this page'
                         ),
                         _react2.default.createElement(
-                            _reactRouterDom.Link,
-                            { to: '/login' },
+                            'a',
+                            { href: '/auth/spotify', className: 'loginButton' },
                             _react2.default.createElement(
                                 _semanticUiReact.Button,
                                 { className: 'ui olive button' },
-                                'LOGIN'
+                                'Log in with Spotify'
                             )
                         )
                     )
@@ -10897,7 +10897,7 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
   var VALUES_BUG = false;
   var proto = Base.prototype;
   var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-  var $default = $native || getMethod(DEFAULT);
+  var $default = (!BUGGY && $native) || getMethod(DEFAULT);
   var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
   var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
   var methods, key, IteratorPrototype;
@@ -25232,7 +25232,7 @@ var HomeBar = function (_Component) {
                                 { id: 'mic', className: 'fa fa-microphone', 'aria-hidden': 'true' },
                                 ' '
                             ),
-                            '           DROP'
+                            'DROP'
                         ),
                         _react2.default.createElement(
                             _reactRouterDom.Link,
@@ -25374,6 +25374,7 @@ var HomeBar = function (_Component) {
                                 'Log in with Spotify'
                             )
                         ),
+                        '2',
                         _react2.default.createElement(
                             _reactRouterDom.Link,
                             { to: '/contact' },
@@ -25710,185 +25711,7 @@ var JoinParty = function (_Component) {
 exports.default = JoinParty;
 
 /***/ }),
-/* 422 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _semanticUiReact = __webpack_require__(28);
-
-var _reactRouterDom = __webpack_require__(21);
-
-var _reactRouter = __webpack_require__(725);
-
-var _axios = __webpack_require__(25);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _styles = __webpack_require__(824);
-
-var _styles2 = _interopRequireDefault(_styles);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Login = function (_Component) {
-    _inherits(Login, _Component);
-
-    function Login() {
-        _classCallCheck(this, Login);
-
-        var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this));
-
-        _this.state = {
-            user: {
-                password: '',
-                email: ''
-            },
-
-            message: ''
-        };
-
-        _this.onSubmit = _this.onSubmit.bind(_this);
-        _this.onChangeEmail = _this.onChangeEmail.bind(_this);
-        _this.onChangePassword = _this.onChangePassword.bind(_this);
-        return _this;
-    }
-
-    _createClass(Login, [{
-        key: 'onSubmit',
-        value: function onSubmit(e) {
-            e.preventDefault();
-
-            // const email = encodeURIComponent(this.state.user.email);
-            // const password = encodeURIComponent(this.state.user.password);
-            // const formData = `email=${email}&password=${password}`;
-
-            // // create an AJAX request (This should probably done with Axios instead) 
-            // const xhr = new XMLHttpRequest();
-            // xhr.open('get', '/auth/spotify');
-            // xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            // xhr.responseType = 'json';
-            // xhr.addEventListener('load', () => {
-            //     if (xhr.status === 200) {
-            //         this.setState({
-            //             message: 'Successfully logged in!'
-            //         })
-            //     } else {
-            //         this.setState({
-            //             message: 'Unable to log in'
-            //         })
-            //     }
-            // });
-            // xhr.send(formData);
-        }
-    }, {
-        key: 'onChangeEmail',
-        value: function onChangeEmail(e) {
-            var user = this.state.user;
-            user.email = e.target.value;
-            this.setState({
-                user: user
-            });
-        }
-    }, {
-        key: 'onChangePassword',
-        value: function onChangePassword(e) {
-            var user = this.state.user;
-            user.password = e.target.value;
-            this.setState({
-                user: user
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                'form',
-                { className: 'Login', action: '/', onSubmit: this.onSubmit },
-                _react2.default.createElement(
-                    _semanticUiReact.Card,
-                    { className: 'Login__content' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'h1',
-                            null,
-                            'Login'
-                        ),
-                        _react2.default.createElement(_semanticUiReact.Input, { label: 'Email', onChange: this.onChangeEmail }),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement(_semanticUiReact.Input, { label: 'Password', onChange: this.onChangePassword }),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement('br', null),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            this.state.message
-                        ),
-                        _react2.default.createElement(_semanticUiReact.Input, { type: 'submit' }),
-                        _react2.default.createElement(
-                            _semanticUiReact.Button,
-                            { className: 'ui inverted small green button' },
-                            _react2.default.createElement(
-                                'a',
-                                { href: '/auth/spotify' },
-                                'Login with Spotify'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'h4',
-                            null,
-                            'No account yet? Click ',
-                            _react2.default.createElement(
-                                _reactRouterDom.Link,
-                                { to: '/register' },
-                                'here'
-                            ),
-                            ' to Register!'
-                        ),
-                        _react2.default.createElement(
-                            _reactRouterDom.Link,
-                            { to: '/dashboard' },
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                'Go to Dashboard'
-                            )
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Login;
-}(_react.Component);
-
-// <form action="/auth/spotify" method="get"> : Login with Spotify
-
-
-exports.default = Login;
-
-/***/ }),
+/* 422 */,
 /* 423 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27086,10 +26909,6 @@ var _Home = __webpack_require__(419);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Login = __webpack_require__(422);
-
-var _Login2 = _interopRequireDefault(_Login);
-
 var _StartParty = __webpack_require__(423);
 
 var _StartParty2 = _interopRequireDefault(_StartParty);
@@ -27124,6 +26943,7 @@ var _main2 = _interopRequireDefault(_main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import Login from './components/Login/Login.jsx';
 (0, _reactDom.render)(_react2.default.createElement(
     _reactRouterDom.BrowserRouter,
     null,
@@ -27135,7 +26955,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             _reactRouterDom.Switch,
             null,
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Home2.default }),
-            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/login', component: _Login2.default }),
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/startParty', component: _StartParty2.default }),
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/joinParty', component: _JoinParty2.default }),
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/channels/:id', component: _Channel2.default }),
@@ -28519,7 +28338,7 @@ $JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
     $replacer = replacer = args[1];
     if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
     if (!isArray(replacer)) replacer = function (key, value) {
-      if ($replacer) value = $replacer.call(this, key, value);
+      if (typeof $replacer == 'function') value = $replacer.call(this, key, value);
       if (!isSymbol(value)) return value;
     };
     args[1] = replacer;
@@ -30478,7 +30297,7 @@ exports = module.exports = __webpack_require__(44)(undefined);
 
 
 // module
-exports.push([module.i, ".unauthorized {\n  top: 50%;\n  position: absolute;\n  left: 50%;\n  width: 60%;\n  height: 20%; }\n\n.olive.card {\n  text-align: center;\n  width: 100% !important;\n  height: 100% !important;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%); }\n\n.unauthorized_text {\n  top: 50%;\n  position: relative;\n  -webkit-transform: translate(0, -50%);\n          transform: translate(0, -50%); }\n", ""]);
+exports.push([module.i, ".unauthorized {\n  top: 50%;\n  position: absolute;\n  left: 50%;\n  width: 60%;\n  height: 20%; }\n\n.olive.card {\n  text-align: center;\n  width: 100% !important;\n  height: 100% !important;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%); }\n\n.unauthorized_text {\n  top: 50%;\n  position: relative;\n  -webkit-transform: translate(0, -50%);\n          transform: translate(0, -50%); }\n\n.loginButton {\n  text-decoration: none; }\n", ""]);
 
 // exports
 
@@ -30526,20 +30345,7 @@ exports.push([module.i, ".ui.button {\n  font-size: 1vw !important; }\n\n.ui.sma
 
 
 /***/ }),
-/* 508 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(44)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".Login {\n  color: skyblue;\n  text-align: center;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%); }\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 508 */,
 /* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -60215,49 +60021,7 @@ NavLink.defaultProps = {
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_react_router_es_withRouter__["a" /* default */]);
 
 /***/ }),
-/* 725 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__ = __webpack_require__(314);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Prompt__ = __webpack_require__(315);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return __WEBPACK_IMPORTED_MODULE_1__Prompt__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Redirect__ = __webpack_require__(316);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_2__Redirect__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Route__ = __webpack_require__(186);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_3__Route__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(125);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_4__Router__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__StaticRouter__ = __webpack_require__(317);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_5__StaticRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Switch__ = __webpack_require__(318);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return __WEBPACK_IMPORTED_MODULE_6__Switch__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__matchPath__ = __webpack_require__(126);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return __WEBPACK_IMPORTED_MODULE_7__matchPath__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__withRouter__ = __webpack_require__(319);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return __WEBPACK_IMPORTED_MODULE_8__withRouter__["a"]; });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/***/ }),
+/* 725 */,
 /* 726 */
 /***/ (function(module, exports) {
 
@@ -73708,32 +73472,7 @@ if(false) {
 }
 
 /***/ }),
-/* 824 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(508);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(49)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../node_modules/css-loader/index.js?-url!../../../../node_modules/postcss-loader/index.js!../../../../node_modules/sass-loader/lib/loader.js!./styles.scss", function() {
-			var newContent = require("!!../../../../node_modules/css-loader/index.js?-url!../../../../node_modules/postcss-loader/index.js!../../../../node_modules/sass-loader/lib/loader.js!./styles.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
+/* 824 */,
 /* 825 */
 /***/ (function(module, exports, __webpack_require__) {
 

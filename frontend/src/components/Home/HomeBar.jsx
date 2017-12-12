@@ -97,7 +97,7 @@ class HomeBar extends Component {
             return(<div className="ui fixed inverted menu">
                             <div className="ui container">  
                                 <div className="menu item">
-                                    <i id="mic" className="fa fa-microphone" aria-hidden="true"> </i>           DROP
+                                    <i id="mic" className="fa fa-microphone" aria-hidden="true"> </i>DROP
                                 </div>
                                 <Link to="/">
                                     <Button className="ui inverted yellow button">
@@ -166,7 +166,7 @@ class HomeBar extends Component {
                                     <Button className="ui inverted green button">
                                         Log in with Spotify
                                     </Button>
-                                </a>
+                                </a>2
                                 {/*
                                 <Link to="/signup">
                                 <Button className="ui yellow button">Sign Up</Button>

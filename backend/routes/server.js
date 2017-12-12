@@ -32,7 +32,7 @@ module.exports = function(router, passport) {
     });
 
     router.get('/auth/spotify/callback',
-        passport.authenticate('spotify', { failureRedirect: '/login' }),
+        passport.authenticate('spotify', { failureRedirect: '/authenticate' }),
         function(req,res){
                 res.redirect('/');
     });

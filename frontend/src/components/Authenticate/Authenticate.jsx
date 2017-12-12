@@ -13,11 +13,11 @@ class Authenticate extends Component {
                     <Card className="olive card">
                         <div className="unauthorized_text">
                             <h1>You must log in before you can see this page</h1>
-                            <Link to="/login">
-                                <Button className="ui olive button">
-                                    LOGIN
-                                </Button>
-                            </Link>
+                            <a href="/auth/spotify" className="loginButton">
+                                    <Button className="ui olive button">
+                                        Log in with Spotify
+                                    </Button>
+                                </a>
                         </div>
                     </Card>
                 </div>
