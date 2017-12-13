@@ -111,7 +111,7 @@ class Channel extends Component {
 
         }
 
-        deleteSong(f) {
+        deleteSong(e, f) {
 
             var i = 'notchanged';
 
@@ -564,7 +564,7 @@ class Channel extends Component {
 
                     </form>
 
-                            <SidebarCategory categories={this.state.categories} receiveSongIndex = {(f) => this.getSongIndex(f)} onSongListClick = {(e) => this.deleteSong(e)} channelID={ this.state.channelID } currentIndex = {this.state.currSongKey} />
+                            <SidebarCategory categories={this.state.categories} receiveSongIndex = {(f) => this.getSongIndex(f)} onSongListClick = {(e, f) => this.deleteSong(e, f)} channelID={ this.state.channelID } currentIndex = {this.state.currSongKey} />
                             </div>
                         </Grid.Column>
                         </Grid.Row>
