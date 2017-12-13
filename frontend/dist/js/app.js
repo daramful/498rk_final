@@ -24372,7 +24372,7 @@ var Home = function (_Component) {
                     _react2.default.createElement(
                         'div',
                         { className: 'mainVideo container' },
-                        _react2.default.createElement('iframe', { width: '620', height: '345', src: 'https://www.youtube.com/embed/i5UAfAvYbRo', frameborder: '0', gesture: 'media', allow: 'encrypted-media', allowfullscreen: true }),
+                        _react2.default.createElement('iframe', { width: '620', height: '345', src: 'https://www.youtube.com/embed/i5UAfAvYbRo', frameBorder: '0', gesture: 'media', allow: 'encrypted-media', allowFullScreen: true }),
                         '\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0'
                     ),
                     _react2.default.createElement('hr', null),

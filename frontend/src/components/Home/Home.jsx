@@ -52,7 +52,7 @@ render() {
         <div className="home">
             <div className="ui main text container">
                 <div className="mainVideo container">
-                    <iframe width="620" height="345" src="https://www.youtube.com/embed/i5UAfAvYbRo" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>                   
+                    <iframe width="620" height="345" src="https://www.youtube.com/embed/i5UAfAvYbRo" frameBorder="0" gesture="media" allow="encrypted-media" allowFullScreen></iframe>                   
                 </div>
                 <hr />
                 <div className="ui header" id="animated_div">
