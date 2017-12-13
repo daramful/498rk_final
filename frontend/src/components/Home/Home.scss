@@ -1,5 +1,5 @@
 .ui.button {
-	font-size: 1vw !important;
+	font-size: 0.7vw !important;
 }
 
 .ui.small.circular.image {
@@ -125,7 +125,19 @@ div.description > ul {
 	  100% {transform: rotate(-360deg);left:0px;}
 	  }
 
+@media only screen and (max-width: 320px) {
+
+   .spotifyButtonText {
+
+	font-size: 1em;
+	color: green;
+}
+
+
+}
+
 .spotifyButtonText {
+
 	text-decoration: none;
 	color: green;
 }
