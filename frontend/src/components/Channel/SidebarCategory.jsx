@@ -24,8 +24,12 @@ export class SidebarCategory extends React.Component {
         axios.delete('/channels/playlist/song?channelId=' + this.props.channelID + '&songId=' + e).then((res)=>{
 
             this.props.onSongListClick(e, f);
-            //alert('id', e)
-            //alert('key', f)
+            alert('id', e)
+            alert('key', f)
+
+            alert(e)
+            alert(f)
+
             console.log("deleted song");
         }).catch((err)=>{
             console.log(err);
@@ -50,7 +54,7 @@ export class SidebarCategory extends React.Component {
                             <div key={key} style={{padding: 1 + 'em'} }>
                       <Card.Header>
                           <Button id="xx" onClick = {  (e) => this.sendIndex(key) }><i className="fa fa-play" aria-hidden="true"></i></Button>  
-                          <Button id="xx" onClick = { (e) => this.clickSongListHandler(category._id, key)}><i className="fa fa-window-close-o" aria-hidden="true"></i></Button>                        
+                          <Button id="xx" onClick = { (e, f) => this.clickSongListHandler(category._id, key)}><i className="fa fa-window-close-o" aria-hidden="true"></i></Button>                        
                       </Card.Header>
                         <Card.Description>
                         <span>{category.songName}</span> - By <span>{category.artist}</span>

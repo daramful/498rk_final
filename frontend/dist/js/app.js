@@ -26544,8 +26544,12 @@ var SidebarCategory = exports.SidebarCategory = function (_React$Component) {
             _axios2.default.delete('/channels/playlist/song?channelId=' + this.props.channelID + '&songId=' + e).then(function (res) {
 
                 _this2.props.onSongListClick(e, f);
-                //alert('id', e)
-                //alert('key', f)
+                alert('id', e);
+                alert('key', f);
+
+                alert(e);
+                alert(f);
+
                 console.log("deleted song");
             }).catch(function (err) {
                 console.log(err);
@@ -26588,7 +26592,7 @@ var SidebarCategory = exports.SidebarCategory = function (_React$Component) {
                                     ),
                                     _react2.default.createElement(
                                         _semanticUiReact.Button,
-                                        { id: 'xx', onClick: function onClick(e) {
+                                        { id: 'xx', onClick: function onClick(e, f) {
                                                 return _this3.clickSongListHandler(category._id, key);
                                             } },
                                         _react2.default.createElement('i', { className: 'fa fa-window-close-o', 'aria-hidden': 'true' })
