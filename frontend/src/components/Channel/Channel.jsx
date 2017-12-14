@@ -113,6 +113,12 @@ class Channel extends Component {
 
         deleteSong(e, f) {
 
+            if(this.state.currSongKey === f) {
+
+                { this.stop() }
+
+            }
+
             var i = 'notchanged';
 
             axios.get('/channels/'+this.state.channelName)

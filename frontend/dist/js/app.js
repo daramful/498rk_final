@@ -23472,6 +23472,13 @@ var Channel = function (_Component) {
         value: function deleteSong(e, f) {
             var _this3 = this;
 
+            if (this.state.currSongKey === f) {
+
+                {
+                    this.stop();
+                }
+            }
+
             var i = 'notchanged';
 
             _axios2.default.get('/channels/' + this.state.channelName).then(function (res) {
@@ -26544,11 +26551,11 @@ var SidebarCategory = exports.SidebarCategory = function (_React$Component) {
             _axios2.default.delete('/channels/playlist/song?channelId=' + this.props.channelID + '&songId=' + e).then(function (res) {
 
                 _this2.props.onSongListClick(e, f);
-                alert('id', e);
-                alert('key', f);
+                //alert('id', e)
+                //alert('key', f)
 
-                alert(e);
-                alert(f);
+                //alert(e)
+                //alert(f)
 
                 console.log("deleted song");
             }).catch(function (err) {

@@ -24,11 +24,11 @@ export class SidebarCategory extends React.Component {
         axios.delete('/channels/playlist/song?channelId=' + this.props.channelID + '&songId=' + e).then((res)=>{
 
             this.props.onSongListClick(e, f);
-            alert('id', e)
-            alert('key', f)
+            //alert('id', e)
+            //alert('key', f)
 
-            alert(e)
-            alert(f)
+            //alert(e)
+            //alert(f)
 
             console.log("deleted song");
         }).catch((err)=>{
