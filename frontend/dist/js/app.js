@@ -26544,8 +26544,8 @@ var SidebarCategory = exports.SidebarCategory = function (_React$Component) {
             _axios2.default.delete('/channels/playlist/song?channelId=' + this.props.channelID + '&songId=' + e).then(function (res) {
 
                 _this2.props.onSongListClick(e, f);
-                //alert('id', e)
-                //alert('key', f)
+                alert('id', e);
+                alert('key', f);
                 console.log("deleted song");
             }).catch(function (err) {
                 console.log(err);
