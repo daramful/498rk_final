@@ -23969,7 +23969,7 @@ var Channel = function (_Component) {
                                                 ),
                                                 _react2.default.createElement(
                                                     _semanticUiReact.Label,
-                                                    { as: 'a', basic: true, pointing: 'left' },
+                                                    { basic: true, pointing: 'left' },
                                                     'Autoplay'
                                                 )
                                             ),
@@ -23988,7 +23988,7 @@ var Channel = function (_Component) {
                                                 ),
                                                 _react2.default.createElement(
                                                     _semanticUiReact.Label,
-                                                    { as: 'a', basic: true, pointing: 'left' },
+                                                    { basic: true, pointing: 'left' },
                                                     'Stop Autoplay'
                                                 )
                                             )

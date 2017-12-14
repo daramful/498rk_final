@@ -554,7 +554,7 @@ class Channel extends Component {
                                 checked = { this.state.autoplayOn === true }/>
                             <Icon name='repeat' />
                         </Button>
-                        <Label as='a' basic pointing='left'>Autoplay</Label>                        
+                        <Label basic pointing='left'>Autoplay</Label>                        
                     </Button>
 
 
@@ -565,7 +565,7 @@ class Channel extends Component {
                             checked = { this.state.autoplayOn === false }/>                    
                             <Icon name='unlinkify' />
                         </Button>
-                        <Label as='a' basic pointing='left'>Stop Autoplay</Label>
+                        <Label basic pointing='left'>Stop Autoplay</Label>
                     </Button>
 
                     </form>
