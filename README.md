@@ -27,7 +27,7 @@ own song medley player.
 
 ## Team Members
 
-- Hyung Eun Lee (hlee295@illinois.edu)
+- Ginny Lee (hlee295@illinois.edu)
 - Jae Min Song (jsong78@illinois.edu)
 - Yong Jin Kim (ykim164@illinois.edu)
 - Hyun Woo Park (hpark125@illinois.edu)
