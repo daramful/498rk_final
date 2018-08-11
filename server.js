@@ -13,8 +13,11 @@ var path = require('path'),
 
 const Mongoose = require('mongoose');
 Mongoose.Promise = global.Promise;
-				 
-Mongoose.connect(config.dbUri, { useMongoClient: true } );
+Mongoose.createConnection(config.dbUri, {
+  keepAlive: true,
+  useMongoClient: true
+});
+
 
 app.use(express.static('./backend/static/'));
 app.use(express.static('./frontend/dist/'));
@@ -27,7 +30,7 @@ app.use(bodyParser.json());
 
 // Static routes
 app.route('/').get(function(req, res) {
-  return res.sendFile(path.join(__dirname, './backend/static/index.html'));
+	return res.sendFile(path.join(__dirname, './backend/static/index.html'));
 });
 app.route('/startParty').get(function(req,res) {
   return res.sendFile(path.join(__dirname, './backend/static/index.html'));
